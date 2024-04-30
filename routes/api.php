@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FirebaseController;
+use App\Http\Controllers\Payment;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/send-code',  [FirebaseController::class, 'sendCode'])->name('code');
-Route::get('/users', [UserController::class, 'index']);
+// Route::get('/users', [UserController::class, 'index']);
+
+Route::post('/paystack/webhook',  [PaymentController::class, 'handleWebhook'])->name('webhook');

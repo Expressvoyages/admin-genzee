@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "819148022270",
+    "firebase_url": "https://genzee-baddies-1-default-rtdb.firebaseio.com",
+    "project_id": "genzee-baddies-1",
+    "storage_bucket": "genzee-baddies-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819148022270:android:638468ba5d19f26411e0af",
+        "android_client_info": {
+          "package_name": "com.genz.net"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819148022270-7lkpnevdtgd4n3url6p3ctn4quual13b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.genz.net",
+            "certificate_hash": "96db120b021d61bce3a22c5248e6afbac856333e"
+          }
+        },
+        {
+          "client_id": "819148022270-0sr91s7svb2t33cue5l022947nn6r2dr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCaXd0EQ3fSCpDknQZkY0xn_gKSlejRGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819148022270-0sr91s7svb2t33cue5l022947nn6r2dr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "819148022270-lu6402gqgvp8vg1bm7a5cehu2t70mhs0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.genzeebaddies.net"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

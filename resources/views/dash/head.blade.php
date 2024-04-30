@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html lang="zxx">
-   <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-      <title>Genzee Baddies</title>
-      <link rel="icon" href="{{asset('img/mini_logo.png" type="image/png')}}">
-      <link rel="stylesheet" href="{{asset('css/bootstrap1.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/themefy_icon/themify-icons.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/niceselect/css/nice-select.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/owl_carousel/css/owl.carousel.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/gijgo/gijgo.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/font_awesome/css/all.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/tagsinput/tagsinput.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/datepicker/date-picker.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/vectormap-home/vectormap-2.0.2.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/scroll/scrollable.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/datatable/css/jquery.dataTables.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/datatable/css/responsive.dataTables.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/datatable/css/buttons.dataTables.min.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/text_editor/summernote-bs4.css')}}" />
-      <link rel="stylesheet" href="{{asset('vendors/morris/morris.css')}}">
-      <link rel="stylesheet" href="{{asset('vendors/material_icon/material-icons.css')}}" />
-      <link rel="stylesheet" href="{{asset('css/metisMenu.css')}}">
-      <link rel="stylesheet" href="{{asset('css/style1.css')}}" />
-      <link rel="stylesheet" href="{{asset('css/colors/default.css')}}" id="colorSkinCSS">
-   </head>
-   <body class="crm_body_bg">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
+    <title>Dashboard | Genzee Baddies ~ Admin</title>
+   
+    <link href="{{asset('admin/css/bootstrap.css?x=1')}}" rel="stylesheet">
+
+    <!--    <link href="{{asset('admin/css/chartist.css?x=1')}}" rel="stylesheet">-->
+    <!--    <link href="{{asset('admin/css/chartist-init.css')}}" rel="stylesheet">-->
+    <!--    <link href="{{asset('admin/css/chartist-plugin-tooltip.css?x=1')}}" rel="stylesheet">-->
+
+    <!--    <link href="{{asset('admin/css/c3.min.css')}}" rel="stylesheet">-->
+
+    <link href="{{asset('admin/css/style.css?x=4')}}" rel="stylesheet">
+
+    <link href="{{asset('admin/css/colors/blue.css')}}" id="theme" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{asset('admin/css/mytheme.css?x=6')}}" type="text/css" media="screen">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>

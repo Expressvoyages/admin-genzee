@@ -57,14 +57,15 @@ class FirebaseController extends Controller
     
             // Pass user data to the view
             return view('admin.users.users', [
-                'users' => $users, // Pass the $users variable to the view
+                'users' => $users,
                 'usersPaginated' => $usersPaginated,
-            ]);
+            ]); 
         } catch (\Exception $e) {
             // Handle error
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+ 
     public function useredit($id)
     {
         // Initialize GuzzleHTTP client
@@ -73,26 +74,147 @@ class FirebaseController extends Controller
         ]);
     
         try {
-            // Send request to fetch user data by ID
-            $response = $client->get("users/$id");
+            // Send request to fetch the user data by ID
+            $response = $client->get('users/' . $id);
             $userData = json_decode($response->getBody()->getContents(), true);
     
+            // Check if user data exists
             if(isset($userData['fields'])) {
-                // Extract user data from the document
-                $userData = $userData['fields'];
-                
-                // Pass user data to the view for editing
-                return view('admin.users.edit', ['user' => $userData]);
+                // Extract user data
+                $user = $userData['fields'];
+    
+                // Include the user's ID in the user data
+                $user['id'] = $id;
+    
+                // Return the edit view with user data
+                return view('admin.users.edit', compact('user'));
             } else {
-                // User not found
+                // Handle case where user data is not found
                 return response()->json(['error' => 'User not found'], 404);
             }
         } catch (\Exception $e) {
             // Handle error
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    }    
-    public function update(Request $request, $id)
+    }
+
+//     public function update(Request $request, $id)
+// {
+//     // Initialize GuzzleHTTP client
+//     $client = new Client([
+//         'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+//     ]);
+
+//     try {
+//         // Convert the string value to boolean
+//         $paid = filter_var($request->input('paid'), FILTER_VALIDATE_BOOLEAN);
+    
+//         // Prepare the user data to be updated
+//         $userData = [
+//             'fields' => [
+//                 'name' => ['stringValue' => $request->input('name') ?? ''],
+//                 'about' => ['stringValue' => $request->input('about') ?? ''],
+//                 'age' => ['stringValue' => $request->input('age') ?? ''],
+//                 'children' => ['stringValue' => $request->input('children') ?? ''],
+//                 'city' => ['stringValue' => $request->input('city') ?? ''],
+//                 'country' => ['stringValue' => $request->input('country') ?? ''],
+//                 'email' => ['stringValue' => $request->input('email') ?? ''],
+//                 'dob' => ['stringValue' => $request->input('dob') ?? ''],
+//                 'gender' => ['stringValue' => $request->input('gender') ?? ''],
+//                 'genotype' => ['stringValue' => $request->input('genotype') ?? ''],
+//                 'height' => ['stringValue' => $request->input('height') ?? ''],
+//                 'hideAccount' => ['stringValue' => $request->input('hideAccount') ?? ''],
+//                 'lastOnline' => ['stringValue' => $request->input('lastOnline') ?? ''],
+//                 'online' => ['stringValue' => $request->input('online') ?? ''],
+//                 'paid' => ['booleanValue' => $paid],
+//                 'phoneNumber' => ['stringValue' => $request->input('phoneNumber') ?? ''],
+//                 'preference' => ['stringValue' => $request->input('preference') ?? ''],
+//                 'state' => ['stringValue' => $request->input('state') ?? ''],
+//                 'status' => ['stringValue' => $request->input('status') ?? ''],
+//                 'university' => ['stringValue' => $request->input('university') ?? ''],
+//                 'verified' => ['booleanValue' => $request->input('verified')],
+//                 'weight' => ['stringValue' => $request->input('weight') ?? ''],
+//             ]
+//         ];
+    
+//         // Send request to update the user data
+//         $response = $client->patch('users/' . $id, [
+//             'json' => $userData,
+//         ]);
+    
+//         // Check if the update was successful
+//         if ($response->getStatusCode() === 200) {
+//             // Redirect back to the user index page with success message
+//             return redirect()->route('users.edit')->with('success', 'User updated successfully');
+//         } else {
+//             // Handle case where update was not successful
+//             return back()->with('error', 'Failed to update user');
+//         }
+//     } catch (\Exception $e) {
+//         // Handle error
+//         return back()->with('error', $e->getMessage());
+//     }
+    
+// }
+//     // public function update(Request $request, $id)
+    // {
+    //     // Initialize GuzzleHTTP client
+    //     $client = new Client([
+    //         'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+    //     ]);
+
+    //     try {
+    //         // Convert the string value to boolean
+    //         $paid = filter_var($request->input('paid'), FILTER_VALIDATE_BOOLEAN);
+
+    //         // Prepare the data to be updated
+    //         $userData = [
+    //             'name' => $request->input('name'),
+    //             'email' => $request->input('email'),
+    //             'about' => $request->input('about'),
+    //             'age' => $request->input('age'),
+    //             'children' => $request->input('children'),
+    //             'city' => $request->input('city'),
+    //             'country' => $request->input('country'),
+    //             'dob' => $request->input('dob'),
+    //             'gender' => $request->input('gender'),
+    //             'genotype' => $request->input('genotype'),
+    //             'height' => $request->input('height'),
+    //             'hideAccount' => $request->input('hideAccount'),
+    //             'lastOnline' => $request->input('lastOnline'),
+    //             // Add more fields as needed
+    //             'latitude' => $request->input('latitude'),
+    //             'longitude' => $request->input('longitude'),
+    //             'online' => $request->input('online'),
+    //             'paid' => $paid, // Store as boolean
+    //             'phoneNumber' => $request->input('phoneNumber'),
+    //             'preference' => $request->input('preference'),
+    //             'state' => $request->input('state'),
+    //             'status' => $request->input('status'),
+    //             'university' => $request->input('university'),
+    //             'verified' => $request->input('verified'),
+    //             'weight' => $request->input('weight'),
+    //         ];
+
+    //         // Send PATCH request to update user data
+    //         $response = $client->patch("users/$id", [
+    //             'json' => ['fields' => $userData]
+    //         ]);
+
+    //         // Check if update was successful
+    //         if ($response->getStatusCode() === 200) {
+    //             // Redirect back to the users index page after successful update
+    //             return redirect()->route('users.index')->with('success', 'User updated successfully');
+    //         } else {
+    //             // Handle update failure
+    //             return redirect()->back()->with('error', 'Failed to update user. Please try again.');
+    //         }
+    //     } catch (\Exception $e) {
+    //         return back()->with('error', $e->getMessage());
+    //     }
+    // }
+ 
+    public function admob()
     {
         // Initialize GuzzleHTTP client
         $client = new Client([
@@ -100,56 +222,79 @@ class FirebaseController extends Controller
         ]);
     
         try {
-            // Convert the string value to boolean
-            $paid = filter_var($request->input('paid'), FILTER_VALIDATE_BOOLEAN);
+            // Send request to fetch the specific document
+            $response = $client->get('admob/f5OIKRALpmXStelHjROW');
+            $admobData = json_decode($response->getBody()->getContents(), true);
     
-            // Prepare the data to be updated
-            $userData = [
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'about' => $request->input('about'),
-                'age' => $request->input('age'),
-                'children' => $request->input('children'),
-                'city' => $request->input('city'),
-                'country' => $request->input('country'),
-                'dob' => $request->input('dob'),
-                'gender' => $request->input('gender'),
-                'genotype' => $request->input('genotype'),
-                'height' => $request->input('height'),
-                'hideAccount' => $request->input('hideAccount'),
-                'lastOnline' => $request->input('lastOnline'),
-                'latitude' => $request->input('latitude'),
-                'longitude' => $request->input('longitude'),
-                'online' => $request->input('online'),
-                'paid' => $paid, // Store as boolean
-                'phoneNumber' => $request->input('phoneNumber'),
-                'preference' => $request->input('preference'),
-                'state' => $request->input('state'),
-                'status' => $request->input('status'),
-                'university' => $request->input('university'),
-                'verified' => $request->input('verified'),
-                'weight' => $request->input('weight'),
-                // Add more fields as needed
-            ];
-    
-            // Send PUT request to update user data
-            $response = $client->put("users/$id", [
-                'json' => ['fields' => $userData]
-            ]);
-    
-            // Check if update was successful
-            if ($response->getStatusCode() === 200) {
-                // Redirect back to the users index page after successful update
-                return redirect()->route('users.index')->with('success', 'User updated successfully');
-            } else {
-                // Handle update failure
-                return redirect()->back()->with('error', 'Failed to update user. Please try again.');
+            // Check if the response contains the expected data
+            if (!isset($admobData['fields'])) {
+                throw new \Exception('The response does not contain the expected "fields" key.');
             }
+    
+            // Extract the fields from the document
+            $fields = $admobData['fields'];
+    
+            // Prepare an array to store the details
+            $admobDetails = [];
+    
+            // Loop through the fields and extract their values
+            foreach ($fields as $fieldName => $fieldData) {
+                if (isset($fieldData['stringValue'])) {
+                    $admobDetails[$fieldName] = $fieldData['stringValue'];
+                } else {
+                    // Handle other data types as needed
+                    $admobDetails[$fieldName] = ''; // Set default value for now
+                }
+            }
+    
+            // Pass the admob details to the view
+            return view('admin.users.admob', [
+                'admobDetails' => $admobDetails,
+            ]);
         } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+            // Handle error
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
     
+    
+    public function admobupdate(Request $request)
+    {
+        // Extract the updated data from the request
+        $adid = $request->input('adid');
+        $pubid = $request->input('pubid');
+    
+        // Initialize GuzzleHTTP client
+        $client = new Client([
+            'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+        ]);
+    
+        try {
+            // Send request to update the "admob" document
+            $response = $client->patch('admob/f5OIKRALpmXStelHjROW', [
+                'json' => [
+                    'fields' => [
+                        'adid' => [
+                            'stringValue' => $adid
+                        ],
+                        'pubid' => [
+                            'stringValue' => $pubid
+                        ]
+                    ]
+                ]
+            ]);
+    
+            // Handle success response
+            return redirect()->back()->with('success', 'Admob details updated successfully.');
+        } catch (\Exception $e) {
+            // Handle error
+            return redirect()->back()->with('error', 'Failed to update Admob details. ' . $e->getMessage());
+        }
+    }
+    
+    
+   
+  
 
 
 
@@ -349,70 +494,7 @@ public function destroy($id)
     return redirect()->route('users.index')->with('success', 'User deleted successfully');
 }
 
-public function sendToFirebase()
-{
-    // Load Firebase credentials
-    $serviceAccount = json_decode(file_get_contents(storage_path('app/genzee-baddies.json')), true);
 
-    // Create Firestore client
-    $firestore = new FirestoreClient([
-        'projectId' => $serviceAccount['project_id'],
-    ]);
-    // Reference the "users" collection
-    $usersCollection = $firestore->collection('users');
-
-    // Retrieve users from the database
-    $users = DB::table('fake_users')->get();
-
-    // Insert each user into Firestore
-    foreach ($users as $user) {
-        $usersCollection->add([
-            'uid' => $user->uid,
-            'about' => $user->about,
-            'age' => $user->age,
-            'alcohol' => $user->alcohol,
-            'balance' => $user->balance,
-            'bodyType' => $user->bodyType,
-            'children' => $user->children,
-            'city' => $user->city,
-            'chatList' => $user->chatList,
-            'company' => $user->company,
-            'country' => $user->country,
-            'dob' => $user->dob,
-            'figureType' => $user->figureType,
-            'gender' => $user->gender,
-            'genotype' => $user->genotype,
-            'height' => $user->height,
-            'hideAccount' => $user->hideAccount,
-            'hobbies' => $user->hobbies,
-            'languages' => $user->languages,
-            'lastOnline' => $user->lastOnline,
-            'latitude' => $user->latitude,
-            'likes' => $user->likes,
-            'longitude' => $user->longitude,
-            'name' => $user->name,
-            'notification' => $user->notification,
-            'online' => $user->online,
-            'paid' => $user->paid,
-            'partnerType' => $user->partnerType,
-            'phoneNumber' => $user->phoneNumber,
-            'position' => $user->position,
-            'preference' => $user->preference,
-            'profileImage' => $user->profileImage,
-            'profileViews' => $user->profileViews,
-            'smoking' => $user->smoking,
-            'specialty' => $user->specialty,
-            'state' => $user->state,
-            'status' => $user->status,
-            'university' => $user->university,
-            'verified' => $user->verified,
-            'weight' => $user->weight,
-            'email' => $user->email,
-        ]);
-    }
-
-    return redirect()->back()->with('success', 'Data sent to Firebase successfully.');
-}
 
         public function sendCode(Request $request) {
 

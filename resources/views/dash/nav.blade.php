@@ -1,113 +1,139 @@
-<nav class="sidebar" >
-   <div class="logo d-flex justify-content-between">
-       <a class="large_logo" href="{{ route('dashboard') }}">
-           <h4 style="font-weight: 900" class="font-weight-bold">Genzee Baddies</h4>
-       </a>
-       <a class="small_logo" href="{{ route('dashboard') }}">
-        <h4 style="font-weight: 900" class="font-weight-bold">Genzee</h4>
-       </a>
-       <div class="sidebar_close_icon d-lg-none">
-           <i class="ti-close"></i>
-       </div>
-   </div>
-   <ul id="sidebar_menu">
-       <li class>
-           <a  href="{{ route('dashboard') }}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/dashboard.svg')}}" alt="Dashboard">
-               </div>
-               <div class="nav_title">
-                   <span>Dashboard</span>
-               </div>
-           </a>
-       </li> <hr><br>
-       <li class>
-           <a href="{{ route('admin.gifts') }}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/12.svg')}}" alt="Gifts">
-               </div>
-               <div class="nav_title">
-                   <span>Gifts</span>
-               </div>
-           </a>
-       </li>
-       <li>
-        <a href="{{ route('admin.stickers') }}" aria-expanded="false">
-            <div class="nav_icon_small">
-                <img src="{{asset('img/menu-icon/3.svg')}}" alt="Stickers">
-            </div>
-            <div class="nav_title">
-                <span>Stickers</span>
-            </div>
-        </a>
-    </li> 
-    <br>
-    <hr> 
-    <br><!-- Add the <hr> tag here to create a line -->
-    <li>
-        <a href="{{ route('users.index') }}" aria-expanded="false">
-            <div class="nav_icon_small">
-                <img src="{{asset('img/menu-icon/5.svg')}}" alt="Admob Settings">
-            </div>
-            <div class="nav_title">
-                <span>All Users</span>
-            </div>
-        </a>
-    </li>
-    <li class>
-        <a href="" aria-expanded="false">
-            <div class="nav_icon_small">
-                <img src="{{asset('img/menu-icon/5.svg')}}" alt="Admob Settings">
-            </div>
-            <div class="nav_title">
-                <span>Payments</span>
-            </div>
-        </a>
-    </li>
-       <li class>
-           <a href="{{ route('users.verify') }}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/5.svg')}}" alt="Admob Settings">
-               </div>
-               <div class="nav_title">
-                   <span>Verifield Users</span>
-               </div>
-           </a>
-       </li>
-       {{-- <li class>
-           <a href="{{ route('admin.spam_check_features') }}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/11.svg')}}" alt="Spam Check Features">
-               </div>
-               <div class="nav_title">
-                   <span>Payments</span>
-               </div>
-           </a>
-       </li> --}}
-       
-       <li class>
-           <a href="{{ route('report.index') }}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/20.svg')}}" alt="Agora Settings">
-               </div>
-               <div class="nav_title">
-                   <span>Report</span>
-               </div>
-           </a>
-       </li>
-     
-     
- <br><hr><br>
-       <li class>
-           <a href="{{route('profile.edit')}}" aria-expanded="false">
-               <div class="nav_icon_small">
-                   <img src="{{asset('img/menu-icon/18.svg')}}" alt="Search Users">
-               </div>
-               <div class="nav_title">
-                   <span>Settings</span>
-               </div>
-           </a>
-       </li>
-    
-   </ul>
-</nav>
+    <aside class="left-sidebar">
+    <div class="scroll-sidebar">
+        <!-- Sidebar scroll-->
+
+        <nav class="sidebar-nav">
+            <!-- Sidebar navigation-->
+
+            <ul id="sidebarnav">
+                <li class="nav-small-cap">General</li>
+
+                <li>
+                    <a class="waves-effect waves-dark active" href="{{route('dashboard')}}" aria-expanded="false">
+                        <i class="ti-dashboard"></i>
+                        <span class="hide-menu">Dashboard</span>
+                    </a>
+                </li>
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                    <li>
+                        <a class="waves-effect waves-dark" href="{{ route('admin.gifts') }}" aria-expanded="false">
+                            <i class="ti-gift"></i>
+                            <span class="hide-menu">Gifts</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                    <li>
+                        <a class="waves-effect waves-dark" href="{{ route('admin.stickers') }}" aria-expanded="false">
+                            <i class="ti-face-smile"></i>
+                            <span class="hide-menu">Stickers</span>
+                        </a>
+                    </li>
+                @endif
+
+
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('users.admob')}}" aria-expanded="false">
+                        <i class="ti-layout-list-post"></i>
+                        <span class="hide-menu">Admob</span>
+                    </a>
+                </li>
+                @endif
+                @if(Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('admins.push')}}" aria-expanded="false">
+                        <i class="ti-bell"></i>
+                        <span class="hide-menu">Push Notifications</span>
+                    </a>
+                </li>
+                @endif
+                
+                @if(Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('admins.help')}}" aria-expanded="false">
+                        <i class="ti-help-alt"></i>
+                        <span class="hide-menu">Help</span>
+                    </a>
+                </li>
+                @endif
+                @if(Auth::user()->user_role != 3 )
+                <li class="nav-devider"></li>
+
+
+
+                <li class="nav-small-cap">User Management</li>
+
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('users.index')}}" aria-expanded="false">
+                        <i class="ti-image"></i>
+                        <span class="hide-menu">All Users</span>
+                    </a>
+                </li>
+                @endif
+                {{-- @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('users.verify')}}" aria-expanded="false">
+                        <i class="ti-comment-alt"></i>
+                        <span class="hide-menu">Verifield Users</span>
+                    </a>
+                </li>
+                @endif --}}
+                @if(Auth::user()->user_role != 3 )
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('admins.payment')}}" aria-expanded="false">
+                        <i class="ti-comments"></i>
+                        <span class="hide-menu">Payments</span>
+                    </a>
+                </li>
+                @endif
+                <li class="nav-devider"></li>
+                @if( Auth::user()->user_role != 4)
+                <li class="nav-small-cap">Reports</li>
+               
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('report.index')}}" aria-expanded="false">
+                        <i class="ti-face-sad"></i>
+                        <span class="hide-menu">Profile Reports</span>
+                    </a>
+                </li>
+                @endif
+            
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                <li class="nav-devider"></li>
+
+                <li class="nav-small-cap">Admin Management</li>
+             
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('roles')}}" aria-expanded="false">
+                        <i class="ti-mobile"></i>
+                        <span class="hide-menu">Admin Roles</span>
+                    </a>
+                </li>
+                @endif
+                <li class="nav-devider"></li>
+
+                <li class="nav-small-cap">Settings</li>
+
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('profile.edit')}}" aria-expanded="false">
+                        <i class="ti-settings"></i>
+                        <span class="hide-menu">Settings</span>
+                    </a>
+                </li>
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('admininistrators')}}" aria-expanded="false">
+                        <i class="ti-crown"></i>
+                        <span class="hide-menu">Administrators</span>
+                    </a>
+                </li>
+                @endif
+
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+    </aside>

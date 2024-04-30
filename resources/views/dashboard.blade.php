@@ -1,352 +1,280 @@
-@include('dash.head')
+@include('dash.head') 
+@include('dash.header') 
 @include('dash.nav')
-@include('dash.header')
-<div class="main_content_iner overly_inner ">
-   <div class="container-fluid p-0 ">
-      <div class="row">
-         <div class="col-12">
-            <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-               <div class="page_title_left d-flex align-items-center">
-                  <h3 class="f_s_25 f_w_700 dark_text mr_30">Hello admin, welcome back</h3>
+<div class="page-wrapper">
+    <!-- Page wrapper  -->
 
-                  <!-- send-to-firebase.blade.php -->
-{{-- <form method="post" action="{{ route('send-to-firebase') }}">
-   @csrf
-   <button type="submit">Send Data to Firebase</button>
-</form> --}}
+    <div class="container-fluid">
+        <!-- Container fluid  -->
 
-@if (isset($errorMessage))
-    <div class="alert alert-danger" role="alert">
-        {{ $errorMessage }}
-    </div>
-@endif
-
-               </div>
-           
+        <div class="row page-titles">
+            <div class="col-md-5 col-8 align-self-center">
+                <h3 class="text-themecolor">Hello {{ auth()->user()->name }}, welcome back</h3>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
             </div>
-         </div>
-      </div>
-      <div class="row ">
-       
-         <div class="col-xl-12 ">
-            <div class="white_card card_height_100 mb_30 user_crm_wrapper">
-               <div class="row">
-                  <div class="col-lg-6">
-                     <div class="single_crm">
-                        <div class="crm_head d-flex align-items-center justify-content-between">
-                           <div class="thumb">
-                              <img src="img/crm/businessman.svg" alt>
-                           </div>
-                           <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                        </div>
-                        <div class="crm_body">
-                           <h4>{{ $totalUsers }}</h4>
-                           <p>Total Users</p>
-                       </div>
-                       
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="single_crm ">
-                        <div class="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
-                           <div class="thumb">
-                              <img src="img/crm/customer.svg" alt>
-                           </div>
-                           <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                        </div>
-                        <div class="crm_body">
-                           <h4>{{ $totalPhoto }}</h4>
-                           <p>Total photos</p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="single_crm">
-                        <div class="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
-                           <div class="thumb">
-                              <img src="img/crm/infographic.svg" alt>
-                           </div>
-                           <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                        </div>
-                        <div class="crm_body">
-                           <h4>{{ $totalStickers }}</h4>
-                           <p>Total Stickers</p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-lg-6">
-                     <div class="single_crm">
-                        <div class="crm_head crm_bg_3 d-flex align-items-center justify-content-between">
-                           <div class="thumb">
-                              <img src="img/crm/sqr.svg" alt>
-                           </div>
-                           <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                        </div>
-                        <div class="crm_body">
-                           <h4>{{ $totalComplains }}</h4>
-                           <p> Total Complains</p>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-         
-            </div>
-         </div>
-
-         <div class="col-xl-12">
-            <div class="white_card card_height_100 mb_30">
-               <div class="white_card_header">
-                  <div class="row align-items-center">
-                     <div class="col-lg-4">
-                        <div class="main-title">
-                           <h3 class="m-0">Full Statistics</h3>
-                        </div>
-                     </div>
-                     <div class="col-lg-8">
-                     
-                     </div>
-                  </div>
-               </div>
-               <div class="white_card_body ">
-                  <div class="row min_height_oveflow">
-                     <div class="col-lg-12 mb_30">
-                        <div class="single_user_pil d-flex align-items-center justify-content-between">
-                           <div class="user_pils_thumb d-flex align-items-center">
-                           
-                              <span style="font-size: 24px" class="f_s_14 f_w_800 text_color_11"><b>Name</b></span>
-                           </div>
-                           <div class="user_info ">
-                              <span style="font-size: 24px" class="f_s_14 f_w_800 text_color_11"><b>Count</b></span>
-                           </div>
-                           <div class="action_btns d-flex">
-                             
-                           </div>
-                        </div>
-                        <div class="single_user_pil d-flex align-items-center justify-content-between">
-                           <div class="user_pils_thumb d-flex align-items-center">
-                           
-                              <span class="f_s_14 f_w_400 text_color_11"><b>Total Users</b></span>
-                           </div>
-                           <div class="user_info">
-                             <h2> {{ $totalUsers }}</h2>
-                           </div>
-                           <div class="action_btns d-flex">
-                             
-                           </div>
-                        </div>
-                        <div class="single_user_pil d-flex align-items-center justify-content-between">
-                           <div class="user_pils_thumb d-flex align-items-center">
-                           
-                              <span class="f_s_14 f_w_400 text_color_11"><b>Total Verified</b></span>
-                           </div>
-                           <div class="user_info">
-                            <h2>  {{ $totalPaidUsers }}</h2>
-                           </div>
-                           <div class="action_btns d-flex">
-                             
-                           </div>
-                        </div>
-                  
-                        <div class="single_user_pil d-flex align-items-center justify-content-between">
-                           <div class="user_pils_thumb d-flex align-items-center">
-                           
-                              <span class="f_s_14 f_w_400 text_color_11"><b>Reports</b></span>
-                           </div>
-                           <div class="user_info">
-                             <h2> {{ $totalComplains }}</h2>
-                           </div>
-                           <div class="action_btns d-flex">
-                             
-                           </div>
-                        </div>
-                        <div class="single_user_pil d-flex align-items-center justify-content-between">
-                           <div class="user_pils_thumb d-flex align-items-center">
-                           
-                              <span class="f_s_14 f_w_400 text_color_11">Total Reports</span>
-                           </div>
-                           <div class="user_info">
-                              00001
-                           </div>
-                           <div class="action_btns d-flex">
-                             
-                           </div>
-                        </div>
-                
-                       
-                     </div>
-              
-                   
-                  </div>
-               </div>
-            </div>
-         </div>
+        </div>
+        @if(Auth::user()->user_role != 1 && Auth::user()->user_role != 2 && Auth::user()->user_role != 4)
 
 
-         <div class="col-lg-6">
-            <div class="single_crm">
-                <div class="crm_body">
-                    <h4>{{ $totalUsers }}</h4>
-                    <p>Total Users</p>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <canvas id="userPieChart" width="200" height="200"></canvas> <!-- Pie chart -->
-                    <canvas id="userBarChart" width="200" height="200"></canvas> <!-- Bar chart -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title m-b-0">All Users</h4>
+                            <button id="exportBtn" class="btn btn-primary">Export to CSV</button>
+                        </div>
+                    </div>
+                    <div class="card-body collapse show">
+                        <div class="table-responsive m-t-20">
+                            <table class="table stylish-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th>Email</th>
+                                        <th>Gender</th>
+                                        <th>Phone Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($usersPaginated as $user)
+                                    <tr>
+                                        <td>{{ $user['name']['stringValue'] }}</td>
+                                        <td>{{ $user['city']['stringValue'] }}</td>
+                                        <td>{{ $user['state']['stringValue'] }}</td>
+                                        <td>{{ $user['email']['stringValue'] }}</td>
+                                        <td>{{ $user['gender']['stringValue'] }}</td>
+                                        <td>{{ $user['phoneNumber']['stringValue'] }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            {{ $usersPaginated->links('vendor.pagination.bootstrap-4') }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        
-      
+
+        @endif
        
-         {{-- <div class="col-xl-12">
-            <div class="white_card card_height_100  mb_20">
-               <div class="white_card_header">
-                  <div class="box_header m-0">
-                     <div class="main-title">
-                        <h3 class="m-0">Visitors</h3>
-                     </div>
-                     <div class="header_more_tool">
-                        <div class="dropdown">
-                           <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                           <i class="ti-more-alt"></i>
-                           </span>
-                           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#"> <i class="ti-eye"></i> Action</a>
-                              <a class="dropdown-item" href="#"> <i class="ti-trash"></i> Delete</a>
-                              <a class="dropdown-item" href="#"> <i class="fas fa-edit"></i> Edit</a>
-                              <a class="dropdown-item" href="#"> <i class="ti-printer"></i> Print</a>
-                              <a class="dropdown-item" href="#"> <i class="fa fa-download"></i> Download</a>
-                           </div>
+        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
+        <div class="row">
+            <!-- Column -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row">
+                            <div class="round round-lg align-self-center round-info">
+                                <i class="ti-user"></i>
+                            </div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0 font-light">{{ $totalUsers }}</h3>
+                                <h5 class="text-muted m-b-0">Total Users</h5>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="white_card_body">
-                  <div id="world-map-markers" class="dashboard_w_map pb_20"></div>
-                  <div class="world_list_wraper">
-                     <div class="row justify-content-center">
-                        <div class="col-lg-9">
-                           <div class="row">
-                              <div class="col-lg-6">
-                                 <div class="single_progressbar">
-                                    <h6 class="f_s_14 f_w_400">USA</h6>
-                                    <div id="bar4" class="barfiller">
-                                       <div class="tipWrap">
-                                          <span class="tip"></span>
-                                       </div>
-                                       <span class="fill" data-percentage="81"></span>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-lg-6">
-                                 <div class="single_progressbar">
-                                    <h6>Australia</h6>
-                                    <div id="bar5" class="barfiller">
-                                       <div class="tipWrap">
-                                          <span class="tip"></span>
-                                       </div>
-                                       <span class="fill" data-percentage="58"></span>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-lg-6">
-                                 <div class="single_progressbar">
-                                    <h6>Brazil</h6>
-                                    <div id="bar6" class="barfiller">
-                                       <div class="tipWrap">
-                                          <span class="tip"></span>
-                                       </div>
-                                       <span class="fill" data-percentage="42"></span>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-lg-6">
-                                 <div class="single_progressbar">
-                                    <h6>Latvia</h6>
-                                    <div id="bar7" class="barfiller">
-                                       <div class="tipWrap">
-                                          <span class="tip"></span>
-                                       </div>
-                                       <span class="fill" data-percentage="55"></span>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
-         </div> --}}
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row">
+                            <div class="round round-lg align-self-center round-warning">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0 font-lgiht">{{ $totalPhoto }}</h3>
+                                <h5 class="text-muted m-b-0">Total photos</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row">
+                            <div class="round round-lg align-self-center round-primary"><i class="ti-comment-alt"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0 font-lgiht">{{ $totalStickers }}</h3>
+                                <h5 class="text-muted m-b-0">Total Stickers</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row">
+                            <div class="round round-lg align-self-center round-danger"><i class="ti-comments"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0 font-lgiht">{{ $totalComplains }}</h3>
+                                <h5 class="text-muted m-b-0"> Total Complains</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        </div>
+        @endif
+        @if(Auth::user()->user_role != 3 )
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title m-b-0">Full Statistics</h4>
+                    </div>
+                    <div class="card-body collapse show">
+                        <div class="table-responsive">
+                            <table class="table product-overview">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Name</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left">Accounts</td>
+                                        <td>{{ $totalUsers }}</td>
+                                    </tr>
+                                   
+                           
+                                    <tr>
+                                        <td class="text-left">Total photos</td>
+                                        <td>{{ $totalPhoto }}</td>
+                                    </tr>
+                                 
 
-      </div>
-   </div>
-</div>
+                                    <tr>
+                                        <td class="text-left">Total gifts</td>
+                                        <td>{{ $totalUsers }}</td>
+                                    </tr>
+                                 
+                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <h4 class="card-title">users</h4>
+                        </div>
+                        <div class="table-responsive m-t-20">
+                            <table class="table stylish-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">User</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 50px;">
+                                            <a href="/admin/profile?id=3276">
+                                                <span class="round" style="background-size: cover; background-image: url(/img/profile_default_photo.png);"></span>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <h6><a href="#"></a></h6>
+                                          
+                                        </td>
+                                        <td>
+                                            <h6></h6>
+                                        </td>
+                                        <td>
+                                            <h6></h6>
+                                        </td>
+                                        <td>
+                                            <h6></h6>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   <td><a href="" class="btn btn-info">View account</a></td>   @endif
+                                    </tr>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-   var pieCtx = document.getElementById('userPieChart').getContext('2d');
-   var barCtx = document.getElementById('userBarChart').getContext('2d');
+    $(document).ready(function () {
+        $('#exportBtn').click(function () {
+            var csv = [];
+            var rows = $('.table tbody tr');
+            rows.each(function (index, row) {
+                var rowData = [];
+                $(row).find('td').each(function (index, column) {
+                    rowData.push($(column).text());
+                });
+                csv.push(rowData.join(','));
+            });
+            downloadCSV(csv.join('\n'), 'Customercare(Userdata).csv');
+        });
 
-   var pieChart = new Chart(pieCtx, {
-       type: 'pie',
-       data: {
-           labels: ['Total Users', 'Other Users'],
-           datasets: [{
-               data: [{{ $totalUsers }}, 100 - {{ $totalUsers }}], // Percentage of total users and other users
-               backgroundColor: [
-                   'rgba(255, 99, 132, 0.8)', // Red color for total users
-                   'rgba(54, 162, 235, 0.8)'   // Blue color for other users
-               ],
-               borderColor: [
-                   'rgba(255, 99, 132, 1)',
-                   'rgba(54, 162, 235, 1)'
-               ],
-               borderWidth: 1
-           }]
-       },
-       options: {
-           responsive: true,
-           legend: {
-               position: 'top',
-           },
-           title: {
-               display: false,
-               text: 'Total Users'
-           },
-           animation: {
-               animateScale: true,
-               animateRotate: true
-           }
-       }
-   });
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
 
-   var barChart = new Chart(barCtx, {
-       type: 'bar',
-       data: {
-           labels: ['Total Users'],
-           datasets: [{
-               label: 'Total Users',
-               data: [{{ $totalUsers }}], // Total number of users
-               backgroundColor: 'rgba(255, 99, 132, 0.8)', // Red color for bars
-               borderColor: 'rgba(255, 99, 132, 1)',
-               borderWidth: 1
-           }]
-       },
-       options: {
-           responsive: true,
-           legend: {
-               display: false
-           },
-           scales: {
-               yAxes: [{
-                   ticks: {
-                       beginAtZero: true
-                   }
-               }]
-           }
-       }
-   });
+            // CSV file
+            csvFile = new Blob([csv], { type: 'text/csv' });
+
+            // Download link
+            downloadLink = document.createElement('a');
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = 'none';
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+    });
 </script>
 
-@include('dash.footer')
+
+        @include('dash.footer')
+
+    </div>
+</div>

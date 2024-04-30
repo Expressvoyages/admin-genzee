@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
+use App\Models\User;
 use GuzzleHttp\Client;
+use App\Models\Payment;
+use App\Models\HelpPage;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Client\RequestException;
 
 
 class VerifieldController extends Controller
@@ -51,10 +57,31 @@ class VerifieldController extends Controller
                 }
             }
     
+              // Iterate through each document in the users collection
+              foreach ($usersData['documents'] as $document) {
+                // Extract user data from the document
+                $userData = $document['fields'];
+    
+                // Add the user data to the array
+                $users[] = $userData;
+            }
+
+             // Paginate the user data
+             $perPage = 10; // Number of items per page
+             $currentPage = request()->query('page', 1); // Get the current page from the query string
+             $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
+             $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
+             $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+                 $usersPaginated,
+                 count($users),
+                 $perPage,
+                 $currentPage,
+                 ['path' => url()->current()]
+             );
             // Total users count
             $totalUsers = count($usersData['documents']);
     
-            return view('dashboard', compact('totalPhoto', 'totalStickers', 'totalUsers', 'totalComplains', 'totalPaidUsers'));
+            return view('dashboard', compact('totalPhoto', 'totalStickers', 'totalUsers', 'totalComplains', 'totalPaidUsers','users','usersPaginated'));
         } catch (\Exception $e) {
             // Handle error
             // You can log the error for debugging purposes
@@ -63,6 +90,147 @@ class VerifieldController extends Controller
             return redirect()->route('dashboard')->with('error', 'Failed to fetch data. Please try again.');
         }
     }
+
+    public function admin()
+    {
+        // Fetch users with specific roles (assuming roles are stored as numerical values)
+        $admins = User::whereIn('user_role', [1, 2, 3 ,4])->get();
+
+        return view('admin.admin.index', compact('admins'));
+    }
+  
+public function adminstore(Request $request)
+{
+    // Validate request
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'user_role' => 'required',
+        'description' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Create new user
+    $user = new User();
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->password = bcrypt($request->password);
+    $user->user_role = $request->user_role;
+    $user->description = $request->description;
+
+    // Check if user saved successfully
+    if ($user->save()) {
+        // Redirect with success message
+        return redirect()->route('admins.index')->with('success', 'User created successfully');
+    } else {
+        // Handle error
+        return redirect()->back()->withErrors(['message' => 'Failed to save user'])->withInput();
+    }
+}
+
+    public function adminsedit(User $admin)
+    {
+        return view('admin.admin.edit', compact('admin'));
+    }
+
+    public function admiupdate(Request $request, User $admin)
+    {
+        // Validate request
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'user_role' => 'required',
+            'description' => 'required',
+        ]);
+
+        // Update admin
+        $admin->update($request->all());
+
+        // Redirect to admin index page
+        return redirect()->route('admins.index');
+    }
+
+    public function admindestroy(User $admin)
+    {
+        // Delete admin
+        $admin->delete();
+
+        // Redirect back
+        return redirect()->back()->with('success', 'Admin deleted successfully.');
+    }
+    public function role()
+    {
+        // Fetch users with specific roles (assuming roles are stored as numerical values)
+        $admins = User::whereIn('user_role', [1, 2, 3 ,4])->get();
+
+        return view('admin.admin.role', compact('admins'));
+    }
+
+
+    public function push () {
+        return view('admin.admin.push');
+    }
+
+    public function help () {
+        $helpData = HelpPage::all();
+        return view('admin.admin.help', compact('helpData'));
+    }
+    public function payment () {
+        $payments = Payment::latest()->paginate(10);
+        return view('admin.admin.payment', compact('payments'));
+    }
+    
+
+    public function sendNotification(Request $request)
+    {
+        // Load Firebase API key
+        $firebaseApiKey = "AIzaSyCCaXd0EQ3fSCpDknQZkY0xn_gKSlejRGg"; // Replace with your actual API key from google-services.json
+    
+        // Prepare message data
+        $message = [
+            'notification' => [
+                'title' => $request->input('title'),
+                'body' => $request->input('body')
+            ],
+            'topic' => 'global'
+        ];
+    
+        // Create GuzzleHTTP client
+        $client = new Client([
+            'base_uri' => 'https://fcm.googleapis.com/',
+            'headers' => [
+                'Authorization' => 'key=' . $firebaseApiKey,
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+    
+        try {
+            // Send the request
+            $response = $client->post('fcm/send', [
+                'json' => ['message' => $message]
+            ]);
+    
+            // Check if the request was successful
+            if ($response->getStatusCode() === 200) {
+                return response()->json(['message' => 'Push notification sent successfully']);
+            } else {
+                // Handle error
+                return response()->json(['error' => 'Failed to send push notification'], $response->getStatusCode());
+            }
+        } catch (RequestException $e) {
+            // Handle request exceptions
+            return response()->json(['error' => 'Request Exception: ' . $e->getMessage()], $e->getCode());
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json(['error' => 'Exception: ' . $e->getMessage()]);
+        }
+    }
+        
+    
     public function home() {
         return view('welcome');
     }
