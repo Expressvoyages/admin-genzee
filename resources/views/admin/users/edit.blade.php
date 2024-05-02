@@ -125,14 +125,14 @@
                                             <label for="state">State</label>
                                             <input type="text" class="form-control" name="state" id="state" value="{{ $user['state']['stringValue'] }}">
                                         </div>
-                                        <div class="form-group m-2">
+                                        {{-- <div class="form-group m-2">
                                             <label for="status">Relationship Status</label>
                                             <input type="text" class="form-control" name="status" id="status" value="{{ $user['status']['stringValue'] }}">
-                                        </div>
-                                        <div class="form-group m-2">
+                                        </div> --}}
+                                        {{-- <div class="form-group m-2">
                                             <label for="university">University</label>
                                             <input type="text" class="form-control" name="university" id="university" value="{{ $user['university']['stringValue'] }}">
-                                        </div>
+                                        </div> --}}
                                      
                                         <div class="form-group m-2">
                                             <label for="weight">Weight</label>

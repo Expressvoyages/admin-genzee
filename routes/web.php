@@ -37,10 +37,15 @@ Route::post('/send-notification', [VerifieldController::class, 'sendNotification
 Route::get('/push-notification', [VerifieldController::class, 'push'])->name('admins.push');
 Route::get('/help', [VerifieldController::class, 'help'])->name('admins.help');
 Route::get('/payment', [VerifieldController::class, 'payment'])->name('admins.payment');
+Route::get('/delete-account-request', [VerifieldController::class, 'showDeletionForm'])->name('account.delete.form');
 
 
-Route::get('/admob', [FirebaseController::class, 'admob'])->name('users.admob');
-Route::post('/admob/update', [FirebaseController::class, 'admobupdate'])->name('admob.update');
+
+
+
+
+Route::get('/advert', [FirebaseController::class, 'advert'])->name('users.advert');
+Route::post('/advert/update', [FirebaseController::class, 'advertsUpdate'])->name('advert.update');
 
 
 

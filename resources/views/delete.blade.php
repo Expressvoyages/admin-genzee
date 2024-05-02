@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Site made with  v5.6.4, https://mobirise.com -->
+    
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="generator" content="Mobirise v5.6.4, mobirise.com" />
@@ -15,20 +15,71 @@
 
         <title>Genzee-baddies | Date, Chat, Meet New People of prefered Genotype</title>
 
-        <link rel="stylesheet" href="assets/web/assets/css/mobirise2.css" />
-        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css" />
-        <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css" />
-        <link rel="stylesheet" href="assets/dropdown/css/style.css" />
-        <link rel="stylesheet" href="assets/socicon/css/styles.css" />
-        <link rel="stylesheet" href="assets/theme/css/style.css" />
-        <link rel="stylesheet" href="assets/recaptcha.css" />
+        <link rel="stylesheet" href="{{asset('assets/web/assets/css/mobirise2.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-grid.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap-reboot.min.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/dropdown/css/style.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/socicon/css/styles.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/theme/css/style.css')}}" />
+        <link rel="stylesheet" href="{{asset('assets/recaptcha.css')}}" />
         <link rel="preload" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:200,300,400,500,600,700,800,200i,300i,400i,500i,600i,700i,800i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
         <noscript>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:200,300,400,500,600,700,800,200i,300i,400i,500i,600i,700i,800i&display=swap" />
         </noscript>
         <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css" />
         <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css" />
+        <style>
+        .hero-section {
+   
+      background-size: cover;
+      background-position: center;
+      padding: 150px 0;
+      text-align: center;
+      color: #69259c;
+    }
+    .hero-section h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+    .hero-section .btn {
+      font-size: 1.2rem;
+      padding: 10px 30px;
+      background-color: #69259c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+   /* styles.css */
+
+.card {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+        </style>
     </head>
 
     <body>
@@ -58,148 +109,76 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true">
-                            <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('home')}}">Home</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('about')}}">About</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('price')}}">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('help.index')}}">Help</a></li>
-                            <li class="nav-item"><a class="nav-link link text-black display-4" href="#">Login</a></li>
+                          <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('home')}}">Home</a></li>
+                          <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('about')}}">About</a></li>
+                          <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('price')}}">Pricing</a></li>
+                          <li class="nav-item"><a class="nav-link link text-black display-4" href="{{route('help.index')}}">Help</a></li>
+                          <li class="nav-item"><a class="nav-link link text-black display-4" href="#">Login</a></li>
                         </ul>
                     </div>
                 </div>
             </nav>
         </section>
 
-        <section data-bs-version="5.1" class="header1 cid-t6VeqVp4Tv" id="header01-1">
-            <div class="container">
-                <div class="wrapper"> 
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-12 m-auto col-lg-6">
-                            <div class="text-wrapper align-left">
-                                <h1 class="mbr-section-title mbr-fonts-style mb-3 mt-4 display-1"><strong>The first GENOTYPE matching app in the world</strong></h1>
-                                <p class="mbr-text align-left mbr-fonts-style display-7">
-                                    Join&nbsp; & pick from the endless list of odogwu and classy ladies . <br />
-                                    <br />
-                                    <br />
-                                </p>
 
-                                <div class="align-left mbr-section-btn mt-3"><a class="btn btn-lg btn-primary display-4" href="#">Try genzee baddie web</a></div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-12 col-lg-6 image-wrapper">
-                            <img class="w-150"  src="assets/images/23.png" alt="" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+ 
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+ 
+      <div class="text-wrapper align-center">
+        <h1 class="mbr-section-title mbr-fonts-style mb-3 mt-4 display-1"><strong>Delete Account Request</strong></h1>
+        {{-- <p class="mbr-text align-left mbr-fonts-style display-7">
+          When you're prepared to maximize your experience on Genzeebaddies, access our premium features to enhance your Likes and elevate your overall experience. <br />
+        </p> --}}
 
+      
+    </div>
+    </div>
+  </section>
 
-        <section data-bs-version="5.1" class="features2 cid-t6WBlJhol5" id="features02-d">
-            <div class="align-left container">
-                <div class="wrapper">
-                    <div class="row">
-                        <div class="col-12">
-                            <h1 class="mbr-title mbr-fonts-style mbr-white mb-5 display-2"><strong>Why choose us?</strong></h1>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 style="background: white" class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    <img src="{{asset('assets/images/Biotech.png')}}" alt="">
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Genotype Compatibility</strong>
-                                </h2>
+  <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">   <h2 class="card-subtitle mb-4">Request Account Deletion</h2></div>
 
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Our cutting-edge technology harnesses the power of genetics to ensure your connections are not just random, but deeply meaningful and compatible.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 style="background: white" class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    <img src="{{asset('assets/images/Hearts.png')}}" alt="">
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Meet people</strong>
-                                </h2>
-
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Your Gateway to Meeting Amazing People, Where Every Swipe Leads to Exciting Connections and Potential Romance.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 style="background: white" class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    <img src="{{asset('assets/images/Protect.png')}}" alt="">
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Protection</strong>
-                                </h2>
-
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    A safe harbor for love, where security is of utmost importance and your peace of mind matters dearly.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 style="background: white" class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    <img  src="{{asset('assets/images/Mark.png')}}" alt="">
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Verification</strong>
-                                </h2>
-
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Trust is Key, each profile verified for genuine connections and true romance, because your love story deserves real beginnings.
-                                </p>
-                            </div>
+              
+                <div class="container py-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title mb-4"></h1>
+                         
+                
+                            <p class="card-text">If you wish to delete your Genzee baddies account, please follow these steps:</p>
+                
+                            <ol>
+                                <li><strong>Compose an Email:</strong> Send an email to <a href="mailto:support@genzeebaddies.com">support@genzeebaddies.com</a> from the email address associated with your Genzee Baddies account.</li>
+                                <li><strong>Subject Line:</strong> Use the subject line “Account Deletion Request.”</li>
+                                <li><strong>Include Necessary Information:</strong> In the body of the email, please provide the following information to facilitate the account deletion process:
+                                    <ul>
+                                        <li>Your full name.</li>
+                                        <li>The email address associated with your Genzee Baddies account.</li>
+                                        <li>The Phone number  associated with your Genzee Baddies account.</li>
+                                        <li>Photo of the account owner</li>
+                                        <li>Any additional information that may help verify your identity.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Confirmation:</strong> After receiving your request, we will verify the provided information and may reach out for additional details if needed. Once verified, we will proceed with the account deletion.</li>
+                            </ol>
+                
+                            <p class="card-text">Please note that account deletion is a permanent action, and all associated data will be removed from our systems. This process may take a reasonable amount of time to complete.</p>
+                
+                            <p class="card-text">If you have any questions or encounter difficulties during this process, feel free to contact our support team at <a href="mailto:support@genzeebaddies.com">support@genzeebaddies.com</a> or directly from the app.</p>
                         </div>
                     </div>
                 </div>
+
+                
             </div>
-        </section> 
-
-
-        {{-- <section data-bs-version="5.1" class="features2 cid-t6WBlJhol5" id="features02-d">
-            <div class="align-left container">
-                <div class="wrapper">
-                    <div class="row">
-                        <div class="col-12"></div>
-                        <div class="col-12 col-lg-12">
-                            <div class="card">
-                                <h3 class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    About us
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Modern teaching methods</strong>
-                                </h2>
-
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Welcome to GenZee Baddie, Nigeria's pioneering genotype matching app! 
-
-                                    Did you know that every year, approximately 150,000 babies in Nigeria are born with sickle cell anemia, making it one of the highest rates in the world? According to a 2006 study from the World Health Organisation, 24% of the population are carriers of the sickle cell gene, with the prevalence of the SS genotype at about 20 per 1000 births. 
-                                     <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7714115/">Read more here</a>
-                                    
-                                </p>
-
-                        <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                        At GenZee Baddie, we understand the importance of preventing hereditary diseases like sickle cell anemia, which is why we are dedicated to helping you find compatible partners based on genetics. 
-
-                        With our innovative platform, you can swipe your way to healthier and happier relationships. 
-
-                        Join us today and discover a new way to find love in Nigeria!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
-
-       
-
+        </div>
+    </div>
+</div>
         <section data-bs-version="5.1" class="numbers1 cid-t6WBiH4X7e" id="numbers01-c">
             <div class="container">
                 <div class="row justify-content-center content-row">
@@ -262,234 +241,11 @@
             </div>
         </section>
 
-        {{-- <section data-bs-version="5.1" class="features2 cid-t6WBlJhol5" id="features02-d">
-            <div class="align-left container">
-                <div class="wrapper">
-                    <div class="row">
-                        <div class="col-12">
-                            <h1 class="mbr-title mbr-fonts-style mbr-white mb-5 display-2"><strong>Our Services</strong></h1>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    01
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Modern teaching methods</strong>
-                                </h2>
 
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fermentum ut ante sed cursus. Nunc auctor pharetra ex eu rhoncus. Vivamus tincidunt eros sed urna lobortis varius. Nam suscipit neque
-                                    vestibulum.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    02
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Highly qualified teachers</strong>
-                                </h2>
 
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fermentum ut ante sed cursus. Nunc auctor pharetra ex eu rhoncus. Vivamus tincidunt eros sed urna lobortis varius. Nam suscipit neque
-                                    vestibulum.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    03
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Free study schedule</strong>
-                                </h2>
 
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fermentum ut ante sed cursus. Nunc auctor pharetra ex eu rhoncus. Vivamus tincidunt eros sed urna lobortis varius. Nam suscipit neque
-                                    vestibulum.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <div class="card">
-                                <h3 class="mbr-section-subtitle mbr-fonts-style mbr-white mb-3 display-4">
-                                    04
-                                </h3>
-                                <h2 class="mbr-section-title mbr-fonts-style mbr-white mb-3 display-5">
-                                    <strong>Individual approach</strong>
-                                </h2>
 
-                                <p class="mbr-text mbr-white mbr-fonts-style display-7">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fermentum ut ante sed cursus. Nunc auctor pharetra ex eu rhoncus. Vivamus tincidunt eros sed urna lobortis varius. Nam suscipit neque
-                                    vestibulum.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
-
-        <section data-bs-version="5.1" class="article1 cid-t6WAWFgqB7" id="article01-4">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-9">
-                        <h3 class="mbr-section-title pt-5 mbr-fonts-style align-left mb-4 display-2">
-                            <strong>
-                                Genotype, finance, parental influence lead to late marriages- Expert <br />
-                                <a href="https://www.vanguardngr.com/2019/04/genotype-finance-parental-influence-lead-to-late-marriages-expert/" class="text-secondary">Read more</a>
-                            </strong>
-                        </h3>
-                    </div>
-                    <div class="col-lg-3 align-right">
-                        <div class="figure">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="283" height="189" viewBox="0 0 283 189" fill="none">
-                                <ellipse cx="138.49" cy="83.8275" rx="129" ry="51.5289" transform="rotate(-15.3441 138.49 83.8275)" fill="#D3FF24"></ellipse>
-                                <path d="M48.2769 170.343C46.5752 172.544 43.054 171.444 42.9077 168.666L40.9772 132L70.7358 141.296L48.2769 170.343Z" fill="#D3FF24"></path>
-                            </svg>
-
-                            <p class="mbr-text align-left mbr-fonts-style pb-4 display-2"><strong>Hello</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section data-bs-version="5.1" class="features4 cid-t6WABbM5QR" id="features04-3">
-            <div class="container">
-                <div class="row mt-4">
-                    <div class="item features-image сol-12 col-md-12 col-lg-12">
-                        <div class="item-wrapper">
-                            <div class="item-img">
-                                <img src="assets/images/mbr.jpg" alt="" />
-                            </div>
-                            <div class="item-content align-left">
-                               <h1 class="item-content align-center">Create genuine connections!</h1>
-                                <p class="mbr-text mbr-fonts-style mt-3 display-5">The human existence is based on love and connections. Meet your partner here and create your happy ending story with us.</p>
-                                <div class="align-center mbr-section-btn mt-3"><a class="btn btn-lg btn-primary display-4" href="#">Download the app</a></div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- <div class="item features-image сol-12 col-md-6 col-lg-6">
-                        <div class="item-wrapper">
-                            <div class="item-img">
-                                <img src="assets/images/mbr.jpg" alt="" />
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
-            </div>
-        </section>
-
-        {{-- <section data-bs-version="5.1" class="people4 cid-t6WBaVOXLb" id="people04-9">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 pb-4">
-                        <h3 class="mbr-section-maintitle mbr-fonts-style align-left mb-4 display-1">
-                            <strong>Speakers</strong>
-                        </h3>
-                    </div>
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team1.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>Jason Vila</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">Speaker</h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team6.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>Billie Freeman</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">
-                                    Speaker
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team3.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>Alan Ramos</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">
-                                    Speaker
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team4.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>Helen Smith</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">
-                                    Speaker
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team5.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>April Farley</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">
-                                    Speaker
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-2 col-md-4">
-                        <div class="card-wrap">
-                            <div class="image-wrap">
-                                <img src="assets/images/team2.jpg" alt="" />
-                            </div>
-                            <div class="content-wrap">
-                                <h5 class="mbr-section-title card-title mbr-fonts-style align-left m-0 display-5">
-                                    <strong>Juan Mathew</strong>
-                                </h5>
-                                <h6 class="mbr-role mbr-fonts-style align-left mb-3 display-4">
-                                    Speaker
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
+      
 
         <section data-bs-version="5.1" class="people3 mbr-embla cid-t6WBcjkqx5" id="people03-a">
             <div class="position-relative text-center">
@@ -519,46 +275,6 @@
                                     </div>
                                 </div>
                             </div>
-                                         <div class="embla__slide slider-image item" style="margin-left: 7rem; margin-right: 7rem;">
-                                <div class="user">
-                                    <div class="user_image d-flex">
-                                        <div class="img-wrapper position-relative">
-                                            <img src="{{asset('assets/images/download.png')}}" alt="" />
-                                        </div>
-                                        <div class="wrap">
-                                            <div class="user_name align-left mbr-fonts-style display-5">
-                                                <strong>CNN</strong>
-                                            </div>
-                                        
-                                        </div>
-                                    </div>
-                                    <div class="user_text mt-3">
-                                        <p class="mbr-fonts-style align-left display-4">
-                                           In Nigeria, your genetic makeup can decide if you get a second date <a href="https://edition.cnn.com/2019/07/10/health/genotype-dating-nigeria-intl/index.html" style="color:rgb(204, 0, 0) !important">Read more</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                                <div class="embla__slide slider-image item" style="margin-left: 7rem; margin-right: 7rem;">
-                                <div class="user">
-                                    <div class="user_image d-flex">
-                                        <div class="img-wrapper position-relative">
-                                            <img src="{{asset('assets/images/unnamed.png')}}" alt="" />
-                                        </div>
-                                        <div class="wrap">
-                                            <div class="user_name align-left mbr-fonts-style display-5">
-                                                <strong>DAILYTRUST</strong>
-                                            </div>
-                                        
-                                        </div>
-                                    </div>
-                                    <div class="user_text mt-3">
-                                        <p class="mbr-fonts-style align-left display-4">
-                                            Sickle Cell: ‘You Need To Know Your Genotype’ <a href="https://dailytrust.com/sickle-cell-you-need-to-know-your-genotype/" style="color:rgb(204, 0, 0) !important">Read more</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="embla__slide slider-image item" style="margin-left: 7rem; margin-right: 7rem;">
                                 <div class="user">
                                     <div class="user_image d-flex">
@@ -574,7 +290,7 @@
                                     </div>
                                     <div class="user_text mt-3">
                                         <p class="mbr-fonts-style align-left display-4">
-                                            Let’s punish violators of my proposed Sickle Cell laws — Otoikhian, Prof of Genetics <a href="https://www.vanguardngr.com/2023/11/lets-punish-violators-of-my-proposed-sickle-cell-laws-otoikhian-prof-of-genetics/" style="color:rgb(204, 0, 0) !important">Read more</a>
+                                            Let’s punish violators of my proposed Sickle Cell laws — Otoikhian, Prof of Genetics <a href="https://www.vanguardngr.com/2023/11/lets-punish-violators-of-my-proposed-sickle-cell-laws-otoikhian-prof-of-genetics/">Read more</a>
                                         </p>
                                     </div>
                                 </div>
@@ -594,7 +310,7 @@
                                     </div>
                                     <div class="user_text mt-3">
                                         <p class="mbr-fonts-style align-left display-4">
-                                            Genotype, blood match tests, key to healthy procreation in marriages, says Soludo <a href="https://www.vanguardngr.com/2023/04/genotype-blood-match-tests-key-to-healthy-procreation-in-marriages-says-soludo/" style="color:rgb(204, 0, 0) !important">Read more</a>
+                                            Genotype, blood match tests, key to healthy procreation in marriages, says Soludo <a href="https://www.vanguardngr.com/2023/04/genotype-blood-match-tests-key-to-healthy-procreation-in-marriages-says-soludo/">Read more</a>
                                         </p>
                                     </div>
                                 </div>
@@ -615,12 +331,31 @@
                                     </div>
                                     <div class="user_text mt-3">
                                         <p class="mbr-fonts-style align-left display-4">
-                                            Sickle Cell: Don Seeks Legislation for  Pre-marital Genotype Test in Nigeria <a href="https://www.thisdaylive.com/index.php/2023/10/13/sickle-cell-don-seeks-legislation-for-pre-marital-genotype-test-in-nigeria?amp=1" style="color:rgb(204, 0, 0) !important">Read more</a>
+                                            Sickle Cell: Don Seeks Legislation for  Pre-marital Genotype Test in Nigeria <a href="https://www.thisdaylive.com/index.php/2023/10/13/sickle-cell-don-seeks-legislation-for-pre-marital-genotype-test-in-nigeria?amp=1">Read more</a>
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                        
+                            <div class="embla__slide slider-image item" style="margin-left: 7rem; margin-right: 7rem;">
+                                <div class="user">
+                                    <div class="user_image d-flex">
+                                        <div class="img-wrapper position-relative">
+                                            <img src="{{asset('assets/images/unnamed.png')}}" alt="" />
+                                        </div>
+                                        <div class="wrap">
+                                            <div class="user_name align-left mbr-fonts-style display-5">
+                                                <strong>DAILYTRUST</strong>
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="user_text mt-3">
+                                        <p class="mbr-fonts-style align-left display-4">
+                                            Sickle Cell: ‘You Need To Know Your Genotype’ <a href="https://dailytrust.com/sickle-cell-you-need-to-know-your-genotype/">Read more</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="embla__slide slider-image item" style="margin-left: 7rem; margin-right: 7rem;">
                                 <div class="user">
                                     <div class="user_image d-flex">
@@ -636,7 +371,7 @@
                                     </div>
                                     <div class="user_text mt-3">
                                         <p class="mbr-fonts-style align-left display-4">
-                                            Intending couples must go for genotype test –Gowon <a href="https://punchng.com/intending-couples-must-go-genotype-test-gowon/" style="color:rgb(204, 0, 0) !important">Read more</a>
+                                            Intending couples must go for genotype test –Gowon <a href="https://punchng.com/intending-couples-must-go-genotype-test-gowon/" >Read more</a>
                                         </p>
                                     </div>
                                 </div>
@@ -654,7 +389,6 @@
                 </div>
             </div>
         </section>
-
 
         <section data-bs-version="5.1" class="list1 cid-t6WBg7Wy5c" id="list01-b">
             <div class="container">
@@ -1005,10 +739,10 @@
                             <strong>Info</strong>
                         </h5>
                         <ul class="list mbr-fonts-style display-4">
-                            {{-- <li class="mbr-text item-wrap">Privacy Policy</li>
-                            <li class="mbr-text item-wrap"></li> --}}
-                            <li class="mbr-text item-wrap" ><a href="{{route('help.index')}}">Help</a></li>
-                            <li class="mbr-text item-wrap"><a href="{{route('account.delete.form')}}">Request to delete account</a></li>
+                            <li class="mbr-text item-wrap">Privacy Policy</li>
+                            <li class="mbr-text item-wrap">Terms</li>
+                            <li class="mbr-text item-wrap">Condition</li>
+                            <li class="mbr-text item-wrap">Help</li>
                         </ul>
                     </div>
                 </div>
@@ -1035,14 +769,14 @@
             </div>
         </section>
 
-        <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/smoothscroll/smooth-scroll.js"></script>
-        <script src="assets/ytplayer/index.js"></script>
-        <script src="assets/dropdown/js/navbar-dropdown.js"></script>
-        <script src="assets/embla/embla.min.js"></script>
-        <script src="assets/embla/script.js"></script>
-        <script src="assets/mbr-switch-arrow/mbr-switch-arrow.js"></script>
-        <script src="assets/theme/js/script.js"></script>
-        <script src="assets/formoid.min.js"></script>
+        <script src="{{asset('assets/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{asset('assets/smoothscroll/smooth-scroll.js')}}"></script>
+        <script src="{{asset('assets/ytplayer/index.js')}}"></script>
+        <script src="{{asset('assets/dropdown/js/navbar-dropdown.js')}}"></script>
+        <script src="{{asset('assets/embla/embla.min.js')}}"></script>
+        <script src="{{asset('assets/embla/script.js')}}"></script>
+        <script src="{{asset('assets/mbr-switch-arrow/mbr-switch-arrow.js')}}"></script>
+        <script src="{{asset('assets/theme/js/script.js')}}"></script>
+        <script src="{{asset('assets/formoid.min.js')}}"></script>
     </body>
 </html>

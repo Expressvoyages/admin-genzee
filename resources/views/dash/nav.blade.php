@@ -35,13 +35,13 @@
 
                 @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                 <li>
-                    <a class="waves-effect waves-dark" href="{{route('users.admob')}}" aria-expanded="false">
+                    <a class="waves-effect waves-dark" href="{{route('users.advert')}}" aria-expanded="false">
                         <i class="ti-layout-list-post"></i>
-                        <span class="hide-menu">Admob</span>
+                        <span class="hide-menu">Adverts</span>
                     </a>
                 </li>
                 @endif
-                @if(Auth::user()->user_role != 4)
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                 <li>
                     <a class="waves-effect waves-dark" href="{{route('admins.push')}}" aria-expanded="false">
                         <i class="ti-bell"></i>
@@ -50,14 +50,7 @@
                 </li>
                 @endif
                 
-                @if(Auth::user()->user_role != 4)
-                <li>
-                    <a class="waves-effect waves-dark" href="{{route('admins.help')}}" aria-expanded="false">
-                        <i class="ti-help-alt"></i>
-                        <span class="hide-menu">Help</span>
-                    </a>
-                </li>
-                @endif
+         
                 @if(Auth::user()->user_role != 3 )
                 <li class="nav-devider"></li>
 
@@ -91,13 +84,29 @@
                 <li class="nav-devider"></li>
                 @if( Auth::user()->user_role != 4)
                 <li class="nav-small-cap">Reports</li>
+                @endif
+                @if( Auth::user()->user_role != 4)
                
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('admins.help')}}" aria-expanded="false">
+                        <i class="ti-help-alt"></i>
+                        <span class="hide-menu">Help</span>
+                    </a>
+                </li>
                 <li>
                     <a class="waves-effect waves-dark" href="{{route('report.index')}}" aria-expanded="false">
                         <i class="ti-face-sad"></i>
                         <span class="hide-menu">Profile Reports</span>
                     </a>
                 </li>
+                @if( Auth::user()->user_role != 1 && Auth::user()->user_role != 2 && Auth::user()->user_role != 4)
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('profile.edit')}}" aria-expanded="false">
+                        <i class="ti-settings"></i>
+                        <span class="hide-menu">Settings</span>
+                    </a>
+                </li>
+                @endif
                 @endif
             
                 @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
@@ -112,6 +121,7 @@
                     </a>
                 </li>
                 @endif
+                @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                 <li class="nav-devider"></li>
 
                 <li class="nav-small-cap">Settings</li>
@@ -122,6 +132,7 @@
                         <span class="hide-menu">Settings</span>
                     </a>
                 </li>
+                @endif
                 @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                 <li>
                     <a class="waves-effect waves-dark" href="{{route('admininistrators')}}" aria-expanded="false">

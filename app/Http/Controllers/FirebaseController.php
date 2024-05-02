@@ -213,56 +213,97 @@ class FirebaseController extends Controller
     //         return back()->with('error', $e->getMessage());
     //     }
     // }
- 
-    public function admob()
+    public function advert()
     {
         // Initialize GuzzleHTTP client
-        $client = new Client([
-            'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
-        ]);
-    
-        try {
-            // Send request to fetch the specific document
-            $response = $client->get('admob/f5OIKRALpmXStelHjROW');
-            $admobData = json_decode($response->getBody()->getContents(), true);
-    
-            // Check if the response contains the expected data
-            if (!isset($admobData['fields'])) {
-                throw new \Exception('The response does not contain the expected "fields" key.');
-            }
-    
-            // Extract the fields from the document
-            $fields = $admobData['fields'];
-    
-            // Prepare an array to store the details
-            $admobDetails = [];
-    
-            // Loop through the fields and extract their values
-            foreach ($fields as $fieldName => $fieldData) {
-                if (isset($fieldData['stringValue'])) {
-                    $admobDetails[$fieldName] = $fieldData['stringValue'];
-                } else {
-                    // Handle other data types as needed
-                    $admobDetails[$fieldName] = ''; // Set default value for now
-                }
-            }
-    
-            // Pass the admob details to the view
-            return view('admin.users.admob', [
-                'admobDetails' => $admobDetails,
-            ]);
-        } catch (\Exception $e) {
-            // Handle error
-            return response()->json(['error' => $e->getMessage()], 500);
+    $client = new Client([
+        'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+    ]);
+
+    try {
+        // Send request to fetch the specific document
+        $response = $client->get('adverts/adverts');
+        $advertsData = json_decode($response->getBody()->getContents(), true);
+
+        // Check if the response contains the expected data
+        if (!isset($advertsData['fields'])) {
+            throw new \Exception('The response does not contain the expected "fields" key.');
         }
+
+        // Extract the fields from the document
+        $fields = $advertsData['fields'];
+
+        // Prepare an array to store the details
+        $advertsDetails = [];
+
+        // Loop through the fields and extract their values
+        foreach ($fields as $fieldName => $fieldData) {
+            if (isset($fieldData['stringValue'])) {
+                $advertsDetails[$fieldName] = $fieldData['stringValue'];
+            } else {
+                // Handle other data types as needed
+                $advertsDetails[$fieldName] = ''; // Set default value for now
+            }
+        }
+
+        // Pass the adverts details to the view
+        return view('admin.users.admob', [
+            'advertsDetails' => $advertsDetails,
+        ]);
+    } catch (\Exception $e) {
+        // Handle error
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
     }
     
+    // public function admob()
+    // {
+    //     // Initialize GuzzleHTTP client
+    //     $client = new Client([
+    //         'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+    //     ]);
     
-    public function admobupdate(Request $request)
+    //     try {
+    //         // Send request to fetch the specific document
+    //         $response = $client->get('admob/f5OIKRALpmXStelHjROW');
+    //         $admobData = json_decode($response->getBody()->getContents(), true);
+    
+    //         // Check if the response contains the expected data
+    //         if (!isset($admobData['fields'])) {
+    //             throw new \Exception('The response does not contain the expected "fields" key.');
+    //         }
+    
+    //         // Extract the fields from the document
+    //         $fields = $admobData['fields'];
+    
+    //         // Prepare an array to store the details
+    //         $admobDetails = [];
+    
+    //         // Loop through the fields and extract their values
+    //         foreach ($fields as $fieldName => $fieldData) {
+    //             if (isset($fieldData['stringValue'])) {
+    //                 $admobDetails[$fieldName] = $fieldData['stringValue'];
+    //             } else {
+    //                 // Handle other data types as needed
+    //                 $admobDetails[$fieldName] = ''; // Set default value for now
+    //             }
+    //         }
+    
+    //         // Pass the admob details to the view
+    //         return view('admin.users.admob', [
+    //             'admobDetails' => $admobDetails,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         // Handle error
+    //         return response()->json(['error' => $e->getMessage()], 500);
+    //     }
+    // }
+    
+    public function advertsUpdate(Request $request)
     {
         // Extract the updated data from the request
-        $adid = $request->input('adid');
-        $pubid = $request->input('pubid');
+        $link = $request->input('link');
+        $photoUrl = $request->input('photoUrl');
     
         // Initialize GuzzleHTTP client
         $client = new Client([
@@ -270,27 +311,28 @@ class FirebaseController extends Controller
         ]);
     
         try {
-            // Send request to update the "admob" document
-            $response = $client->patch('admob/f5OIKRALpmXStelHjROW', [
+            // Send request to update the "adverts" document
+            $response = $client->patch('adverts/adverts', [
                 'json' => [
                     'fields' => [
-                        'adid' => [
-                            'stringValue' => $adid
+                        'link' => [
+                            'stringValue' => $link
                         ],
-                        'pubid' => [
-                            'stringValue' => $pubid
+                        'photoUrl' => [
+                            'stringValue' => $photoUrl
                         ]
                     ]
                 ]
             ]);
     
             // Handle success response
-            return redirect()->back()->with('success', 'Admob details updated successfully.');
+            return redirect()->back()->with('success', 'Adverts details updated successfully.');
         } catch (\Exception $e) {
             // Handle error
-            return redirect()->back()->with('error', 'Failed to update Admob details. ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update Adverts details. ' . $e->getMessage());
         }
     }
+    
     
     
    

@@ -22,6 +22,17 @@
                 </div>
                 @endif
                 <h4 class="card-title">All User</h4>
+                <div class="mt-3">
+                    <form action="{{ route('users.index') }}" method="GET" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search by Name or Email">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        @if(request('search'))
+                        <a href="{{ route('users.index') }}" class="btn btn-secondary ml-2">Clear Search</a>
+                        @endif
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -30,7 +41,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0">All Users</h4>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title m-b-0">All Users</h4>
+                            <button id="exportrBtn" class="btn btn-primary">Export to CSV</button>
+                        </div>
+                        
+        
                     </div>
                     <div class="card-body collapse show">
                         <div class="table-responsive">
@@ -87,5 +103,51 @@
 </div>
 
 
+
+
+
 @include('dash.footer')
 
+<script>
+    $(document).ready(function () {
+        $('#exportrBtn').click(function () {
+            var csv = [];
+            var rows = $('.table tbody tr');
+            rows.each(function (index, row) {
+                var rowData = [];
+                // Exclude the last column (Action) from each row
+                $(row).find('td:not(:last-child)').each(function (index, column) {
+                    rowData.push($(column).text());
+                });
+                csv.push(rowData.join(','));
+            });
+            downloadCSV(csv.join('\n'), '(Userdata).csv');
+        });
+
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], { type: 'text/csv' });
+
+            // Download link
+            downloadLink = document.createElement('a');
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = 'none';
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+    });
+</script>

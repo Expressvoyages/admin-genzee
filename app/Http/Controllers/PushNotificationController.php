@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\cr;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\PushNotification;
+
 
 class PushNotificationController extends Controller
 {
@@ -18,32 +20,84 @@ class PushNotificationController extends Controller
         $push_notifications = PushNotification::orderBy('created_at', 'desc')->get();
         return view('admin.admin.push', compact('push_notifications'));
     }
-    public function bulksend(Request $req){
-        $comment = new PushNotification();
-        $comment->title = $req->input('title');
-        $comment->body = $req->input('body');
-        $comment->img = $req->input('img');
-        $comment->save();
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        $dataArr = array('click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'id' => $req->id,'status'=>"done");
-        $notification = array('title' =>$req->title, 'text' => $req->body, 'image'=> $req->img, 'sound' => 'default', 'badge' => '1',);
-        $arrayToSend = array('to' => "/topics/all", 'notification' => $notification, 'data' => $dataArr, 'priority'=>'high');
-        $fields = json_encode ($arrayToSend);
-        $headers = array (
-            'Authorization: key=' . "AAAAvrkG4f4:APA91bFsBgQJRUQJze8tYZNEFDEHiE8b8v3LBPLPapeSl3RxHuEeOticUS3U4ICVcMELcwb1mnqSUs2MokYAMvl4VbQRTtm_JfEJhIj59uRbLALpYAcEFMyC-WKxjVmH0fHFleySwLIF",
-            'Content-Type: application/json'
-        );
-        $ch = curl_init ();
-        curl_setopt ( $ch, CURLOPT_URL, $url );
-        curl_setopt ( $ch, CURLOPT_POST, true );
-        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-        $result = curl_exec ( $ch );
-        //var_dump($result);
-        curl_close ( $ch );
-        return redirect()->back()->with('success', 'Notification Send successfully');
+    public function bulksend( Request $request) {
+
+       // Initialize GuzzleHTTP client
+    $client = new Client([
+        'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+    ]);
+// Retrieve FCM tokens from Firestore
+try {
+    $response = $client->get('fcmtoken');
+    $data = json_decode($response->getBody()->getContents(), true);
+
+    // Extract FCM tokens from the response
+    $tokens = [];
+    foreach ($data['documents'] as $document) {
+        $fields = $document['fields'];
+        if (isset($fields['fcmToken']['stringValue'])) {
+            $tokens[] = $fields['fcmToken']['stringValue'];
+        }
     }
+
+//     // Debugging: Check if tokens are properly retrieved
+// var_dump($tokens); // or print_r($tokens);
+
+    // Check if tokens array is empty
+    if (empty($tokens)) {
+        echo 'No FCM tokens found.';
+        return;
+    }
+} catch (\Exception $e) {
+    // Handle error
+    echo 'Failed to retrieve FCM tokens: ' . $e->getMessage();
+    return;
+}
+
+        // Send Push Notifications
+        $apiKey = 'AAAAvrkG4f4:APA91bFsBgQJRUQJze8tYZNEFDEHiE8b8v3LBPLPapeSl3RxHuEeOticUS3U4ICVcMELcwb1mnqSUs2MokYAMvl4VbQRTtm_JfEJhIj59uRbLALpYAcEFMyC-WKxjVmH0fHFleySwLIF';
+        $url = 'https://fcm.googleapis.com/fcm/send';
+    
+        $headers = [
+            'Authorization' => 'key=' . $apiKey,
+            'Content-Type' => 'application/json',
+        ];
+    
+        $notification = [
+            'title' => $request->input('title'),
+            'body' => $request->input('body'),
+            'image' => $request->input('img'),
+        ];
+    
+        $notificationData = [
+            'notification' => $notification,
+            'registration_ids' => $tokens, // Array of FCM tokens
+            'time_to_live' => 604800,
+        ];
+    
+        try {
+            $response = $client->post($url, [
+                'headers' => $headers,
+                'json' => $notificationData,
+            ]);
+    // dd($response);
+                    // Extract success and failure counts from the response
+            $responseData = json_decode($response->getBody(), true);
+            $successCount = isset($responseData['success']) ? $responseData['success'] : 0;
+            $failureCount = isset($responseData['failure']) ? $responseData['failure'] : 0;
+
+            // Store success and failure counts in session
+            session()->flash('successCount', $successCount);
+            session()->flash('failureCount', $failureCount);
+
+            // Redirect back
+            return redirect()->route('admins.push');
+        } catch (\Exception $e) {
+            // Handle error
+            echo 'Failed to send notifications: ' . $e->getMessage();
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

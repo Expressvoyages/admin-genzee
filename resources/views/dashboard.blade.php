@@ -16,6 +16,49 @@
                 </ol>
             </div>
         </div>
+
+
+
+        
+        @if(Auth::user()->user_role != 1 && Auth::user()->user_role != 2 && Auth::user()->user_role != 3)
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title m-b-0">All Payments</h4>
+                            <button id="exportBitn" class="btn btn-primary">Export to CSV</button>
+                        </div>
+                    </div>
+                    <div class="card-body collapse show">
+                        <div class="table-responsive m-t-20">
+                            <table class="table stylish-table">
+                                <thead>
+                                    <tr>
+                                     
+                                        <th>transaction_id</th>
+                                        <th>user_id</th>
+                                        <th>amount</th>
+                                        <th>status</th>
+                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        @endif
+
         @if(Auth::user()->user_role != 1 && Auth::user()->user_role != 2 && Auth::user()->user_role != 4)
 
 
@@ -78,7 +121,7 @@
                             </div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-light">{{ $totalUsers }}</h3>
-                                <h5 class="text-muted m-b-0">Total Users</h5>
+                                <h5 class="text-muted m-b-0"><a href="{{route('users.index')}}">Total Users</a></h5>
                             </div>
                         </div>
                     </div>
@@ -110,7 +153,7 @@
                             <div class="round round-lg align-self-center round-primary"><i class="ti-comment-alt"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-lgiht">{{ $totalStickers }}</h3>
-                                <h5 class="text-muted m-b-0">Total Stickers</h5>
+                                <h5 class="text-muted m-b-0"> <a href="{{route('admin.stickers')}}">Total Stickers</a></h5>
                             </div>
                         </div>
                     </div>
@@ -125,7 +168,7 @@
                             <div class="round round-lg align-self-center round-danger"><i class="ti-comments"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-lgiht">{{ $totalComplains }}</h3>
-                                <h5 class="text-muted m-b-0"> Total Complains</h5>
+                                <h5 class="text-muted m-b-0"> <a href="{{route('report.index')}}"> Total Complains</a></h5>
                             </div>
                         </div>
                     </div>
@@ -133,96 +176,84 @@
             </div>
             <!-- Column -->
         </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Users by State</h4>
+                <ul class="list-group">
+                    @foreach($usersByState as $state => $count)
+                        <li class="list-group-item">
+                            <span>{{ $state }}: {{ $count }}</span>
+                            <span class="badge badge-primary badge-pill">{{ round(($count / $totalUsers) * 100, 2) }}%</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total Users by City</h4>
+                <ul class="list-group">
+                    @foreach($usersByCity as $city => $count)
+                        <li class="list-group-item">
+                            <span>{{ $city }}: {{ $count }}</span>
+                            <span class="badge badge-primary badge-pill">{{ round(($count / $totalUsers) * 100, 2) }}%</span>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        
+        
+        
         @endif
-        @if(Auth::user()->user_role != 3 )
+        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4 )
+        
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title m-b-0">Full Statistics</h4>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="card-title m-b-0">All Users</h4>
+                            <button id="exportBtn" class="btn btn-primary">Export to CSV</button>
+                        </div>
                     </div>
                     <div class="card-body collapse show">
-                        <div class="table-responsive">
-                            <table class="table product-overview">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Name</th>
-                                        <th>Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-left">Accounts</td>
-                                        <td>{{ $totalUsers }}</td>
-                                    </tr>
-                                   
-                           
-                                    <tr>
-                                        <td class="text-left">Total photos</td>
-                                        <td>{{ $totalPhoto }}</td>
-                                    </tr>
-                                 
-
-                                    <tr>
-                                        <td class="text-left">Total gifts</td>
-                                        <td>{{ $totalUsers }}</td>
-                                    </tr>
-                                 
-                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-     
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block">
-                            <h4 class="card-title">users</h4>
-                        </div>
                         <div class="table-responsive m-t-20">
                             <table class="table stylish-table">
                                 <thead>
                                     <tr>
-                                        <th colspan="2">User</th>
                                         <th>Name</th>
+                                        <th>City</th>
+                                        <th>State</th>
                                         <th>Email</th>
+                                        <th>Gender</th>
                                         <th>Phone Number</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach ($usersPaginated as $user)
                                     <tr>
-                                        <td style="width: 50px;">
-                                            <a href="/admin/profile?id=3276">
-                                                <span class="round" style="background-size: cover; background-image: url(/img/profile_default_photo.png);"></span>
-                                            </a>
-                                        </td>
+                                        <td>{{ $user['name']['stringValue'] }}</td>
+                                        <td>{{ $user['city']['stringValue'] }}</td>
+                                        <td>{{ $user['state']['stringValue'] }}</td>
+                                        <td>{{ $user['email']['stringValue'] }}</td>
+                                        <td>{{ $user['gender']['stringValue'] }}</td>
+                                        <td>{{ $user['phoneNumber']['stringValue'] }}</td>
                                         <td>
-                                            <h6><a href="#"></a></h6>
-                                          
+                                            <div class="btn-group" role="group" aria-label="User Actions">
+                                                <a href="{{ route('users.edit', $user['uid']['stringValue']) }}" class="btn btn-info btn-md m-2">Edit</a>
+                                            </div>
                                         </td>
-                                        <td>
-                                            <h6></h6>
-                                        </td>
-                                        <td>
-                                            <h6></h6>
-                                        </td>
-                                        <td>
-                                            <h6></h6>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   <td><a href="" class="btn btn-info">View account</a></td>   @endif
                                     </tr>
-
-    
+                                    @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            {{ $usersPaginated->links('vendor.pagination.bootstrap-4') }}
                         </div>
                     </div>
                 </div>

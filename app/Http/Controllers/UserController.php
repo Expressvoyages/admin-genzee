@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
    
-    public function index()
+    public function index(Request $request)
     {
         // Initialize GuzzleHTTP client
         $client = new Client([
@@ -32,9 +32,18 @@ class UserController extends Controller
                 $users[] = $userData;
             }
     
+            // Filter users based on search query
+            $search = $request->input('search');
+            if ($search) {
+                $users = array_filter($users, function ($user) use ($search) {
+                    return stripos($user['name']['stringValue'], $search) !== false ||
+                           stripos($user['email']['stringValue'], $search) !== false;
+                });
+            }
+    
             // Paginate the user data
             $perPage = 10; // Number of items per page
-            $currentPage = request()->query('page', 1); // Get the current page from the query string
+            $currentPage = $request->query('page', 1); // Get the current page from the query string
             $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
             $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
             $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -55,6 +64,7 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
     public function edit($id)
     {
         // Initialize GuzzleHTTP client
@@ -83,66 +93,138 @@ class UserController extends Controller
         }
     }    
     public function update(Request $request, $id)
- {
-//     // Initialize GuzzleHTTP client
-    $client = new Client([
-        'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
-    ]);
+    {
+        // Initialize GuzzleHTTP client
+        $client = new Client([
+            'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+        ]);
+    
+        try {
+            // Fetch existing user data from Firebase
+            $response = $client->get('users/' . $id);
+            $existingUserData = json_decode($response->getBody()->getContents(), true);
+    
+            // Convert the string value to boolean
+            $paid = $request->has('paid') ? filter_var($request->input('paid'), FILTER_VALIDATE_BOOLEAN) : (isset($existingUserData['fields']['paid']) ? $existingUserData['fields']['paid']['booleanValue'] : false);
+            $verified = isset($existingUserData['fields']['verified']) ? $existingUserData['fields']['verified']['booleanValue'] : false;
+            $hideAccount = isset($existingUserData['fields']['hideAccount']) ? $existingUserData['fields']['hideAccount']['booleanValue'] : false;
+            $notificationLikes = isset($existingUserData['fields']['notificationLikes']) ? $existingUserData['fields']['notificationLikes']['booleanValue'] : false;
+            $notificationMatches = isset($existingUserData['fields']['notificationMatches']) ? $existingUserData['fields']['notificationMatches']['booleanValue'] : false;
+            $notificationViews = isset($existingUserData['fields']['notificationViews']) ? $existingUserData['fields']['notificationViews']['booleanValue'] : false;
+            $online = isset($existingUserData['fields']['online']) ? $existingUserData['fields']['online']['booleanValue'] : false;
+            
 
-    try {
-//         // Convert the string value to boolean
-       $paid = filter_var($request->input('paid'), FILTER_VALIDATE_BOOLEAN);
-       $hideAccount = filter_var($request->input('hideAccount'), FILTER_VALIDATE_BOOLEAN);
-       $online = filter_var($request->input('online'), FILTER_VALIDATE_BOOLEAN);
-       $verified = filter_var($request->input('verified'), FILTER_VALIDATE_BOOLEAN);
-       
-        // Prepare the user data to be updated
-        $userData = [
-           'fields' => [
-               'name' => ['stringValue' => $request->input('name') ?? ''],
-              'about' => ['stringValue' => $request->input('about') ?? ''],
-            'age' => ['stringValue' => $request->input('age') ?? ''],
-                'children' => ['stringValue' => $request->input('children') ?? ''],
-             'city' => ['stringValue' => $request->input('city') ?? ''],
-             'country' => ['stringValue' => $request->input('country') ?? ''],
-               'email' => ['stringValue' => $request->input('email') ?? ''],
-                 'dob' => ['stringValue' => $request->input('dob') ?? ''],
-                 'gender' => ['stringValue' => $request->input('gender') ?? ''],
-                 'genotype' => ['stringValue' => $request->input('genotype') ?? ''],
-                 'height' => ['stringValue' => $request->input('height') ?? ''],
-                 'hideAccount' => ['booleanValue' => $hideAccount],
-                 'online' =>  ['booleanValue' => $online],
-                 'paid' => ['booleanValue' => $paid],
-                 'phoneNumber' => ['stringValue' => $request->input('phoneNumber') ?? ''],
-                 'preference' => ['stringValue' => $request->input('preference') ?? ''],
-                 'state' => ['stringValue' => $request->input('state') ?? ''],
-                 'status' => ['stringValue' => $request->input('status') ?? ''],
-                 'university' => ['stringValue' => $request->input('university') ?? ''],
-                 'uid' => ['stringValue' => $request->input('uid') ?? ''],
-                 'verified' => ['booleanValue' => $verified],
-                 'weight' => ['stringValue' => $request->input('weight') ?? ''],
-             ]
-         ];
+
+            // Handle array fields
+            $arrayFields = ['blockedList', 'chatList', 'hobbies', 'languages', 'likes', 'matches', 'profileImage', 'profileViews'];
+            foreach ($arrayFields as $field) {
+                if (isset($existingUserData['fields'][$field]['arrayValue']['values'])) {
+                    // If the field exists in the Firebase data, use its value
+                    ${$field} = array_map(function ($value) {
+                        return $value['stringValue'];
+                    }, $existingUserData['fields'][$field]['arrayValue']['values']);
+                } else {
+                    // If the field does not exist in the Firebase data, initialize as an empty array
+                    ${$field} = [];
+                }
+            }
+
+
+        // Handle lastOnline timestamp
+        $lastOnline = isset($existingUserData['fields']['lastOnline']['timestampValue']) ? $existingUserData['fields']['lastOnline']['timestampValue'] : null;
+
+                    
+            // Handle longitude as a number
+            $longitude = isset($existingUserData['fields']['longitude']['doubleValue']) ? $existingUserData['fields']['longitude']['doubleValue'] : null;
+            $latitude = isset($existingUserData['fields']['latitude']['doubleValue']) ? $existingUserData['fields']['latitude']['doubleValue'] : null;
+            
+
+            // Prepare the user data to be updated
+            $userData = [
+                'fields' => [
+                   
+                    'blockedList' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $blockedList)]],
+                    'chatList' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $chatList)]],
+                    'hobbies' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $hobbies)]],
+                    'languages' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $languages)]],
+                    'likes' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $likes)]],
+                    'matches' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $matches)]],
+                    'profileImage' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $profileImage)]],
+                    'profileViews' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $profileViews)]],
+
+                    'lastOnline' => ['timestampValue' => $lastOnline],
+
+                    'longitude' => ['doubleValue' => $longitude],
+                    'latitude' => ['doubleValue' => $latitude],
+
+                    'about' => ['stringValue' => $request->input('about') ?? $existingUserData['fields']['about']['stringValue'] ?? ''],
+                 
+                    
+                    'age' => ['stringValue' => $request->input('age') ?? $existingUserData['fields']['age']['stringValue'] ?? ''],
+                    'alcohol' => ['stringValue' => $request->input('alcohol') ?? $existingUserData['fields']['alcohol']['stringValue'] ?? ''],
+                    'bodyType' => ['stringValue' => $request->input('bodyType') ?? $existingUserData['fields']['bodyType']['stringValue'] ?? ''],
+                    'city' => ['stringValue' => $request->input('city') ?? $existingUserData['fields']['city']['stringValue'] ?? ''],
+                    'children' => ['stringValue' => $request->input('children') ?? $existingUserData['fields']['children']['stringValue'] ?? ''],
+                    'country' => ['stringValue' => $request->input('country') ?? $existingUserData['fields']['country']['stringValue'] ?? ''],
+                    'email' => ['stringValue' => $request->input('email') ?? $existingUserData['fields']['email']['stringValue'] ?? ''],
+                    'dob' => ['stringValue' => $request->input('dob') ?? $existingUserData['fields']['dob']['stringValue'] ?? ''],
+                    'gender' => ['stringValue' => $request->input('gender') ?? $existingUserData['fields']['gender']['stringValue'] ?? ''],
+                    'genotype' => ['stringValue' => $request->input('genotype') ?? $existingUserData['fields']['genotype']['stringValue'] ?? ''],
+                    'height' => ['stringValue' => $request->input('height') ?? $existingUserData['fields']['height']['stringValue'] ?? ''],
+                    'name' => ['stringValue' => $request->input('name') ?? $existingUserData['fields']['name']['stringValue'] ?? ''],
+                    'paid' => ['booleanValue' => $paid],
+                    'online' => ['booleanValue' => $online],
+                    'notificationLikes' => ['booleanValue' => $notificationLikes],
+                    'notificationMatches' => ['booleanValue' => $notificationMatches],
+                    'notificationViews' => ['booleanValue' => $notificationViews],
+                    'hideAccount' => ['booleanValue' => $hideAccount],
+                    'partnerType' => ['stringValue' => $request->input('partnerType') ?? $existingUserData['fields']['partnerType']['stringValue'] ?? ''],
+                    'phoneNumber' => ['stringValue' => $request->input('phoneNumber') ?? $existingUserData['fields']['phoneNumber']['stringValue'] ?? ''],
+                    'preference' => ['stringValue' => $request->input('preference') ?? $existingUserData['fields']['preference']['stringValue'] ?? ''],
+                    'state' => ['stringValue' => $request->input('state') ?? $existingUserData['fields']['state']['stringValue'] ?? ''],
+                    'smoking' => ['stringValue' => $request->input('smoking') ?? $existingUserData['fields']['smoking']['stringValue'] ?? ''],
+                    'uid' => ['stringValue' => $request->input('uid') ?? $existingUserData['fields']['uid']['stringValue'] ?? ''],
+                    'verified' => ['booleanValue' => $verified],
+                    'weight' => ['stringValue' => $request->input('weight') ?? $existingUserData['fields']['weight']['stringValue'] ?? ''],
+                    'longitude' => ['stringValue' => $request->input('longitude') ?? $existingUserData['fields']['longitude']['stringValue'] ?? ''],
+                ]
+            ];
     
-//         // Send request to update the user data
-         $response = $client->patch('users/' . $id, [
-             'json' => $userData,
-         ]);
+            // Send request to update the user data
+            $response = $client->patch('users/' . $id, [
+                'json' => $userData,
+            ]);
     
-//         // Check if the update was successful
-         if ($response->getStatusCode() === 200) {
-//             // Redirect back to the user index page with success message
-             return redirect()->route('users.index')->with('success', 'User updated successfully');
-         } else {
-//             // Handle case where update was not successful
-             return back()->with('error', 'Failed to update user');
-         }
-     } catch (\Exception $e) {
-//         // Handle error
-         return back()->with('error', $e->getMessage());
-     }
+            // Check if the update was successful
+            if ($response->getStatusCode() === 200) {
+                // Redirect back to the user index page with success message
+                return redirect()->route('users.index')->with('success', 'User updated successfully');
+            } else {
+                // Handle case where update was not successful
+                return back()->with('error', 'Failed to update user');
+            }
+        } catch (\Exception $e) {
+            // Handle error
+            return back()->with('error', $e->getMessage());
+        }
+    }
     
- }
 
  public function destroy($Id)
 {

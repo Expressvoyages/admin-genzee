@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\HelpPage;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
+use App\Models\DeletionRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Client\RequestException;
@@ -44,6 +45,10 @@ class VerifieldController extends Controller
             $totalPhoto = 0; // Initialize total photo count
             $totalPaidUsers = 0; // Initialize total paid users count
     
+            // Initialize an empty array to store the count of users for each state
+            $usersByState = [];
+            $usersByCity = [];
+
             // Iterate over each user document
             foreach ($usersData['documents'] as $user) {
                 // Check if the user has a profileImage field and it's not empty
@@ -55,33 +60,58 @@ class VerifieldController extends Controller
                 if (isset($user['fields']['paid']) && $user['fields']['paid'] == true) {
                     $totalPaidUsers++; // Increment total paid users count
                 }
+    
+                // Check if the user has a state field and it's not empty
+                if (isset($user['fields']['state']) && !empty($user['fields']['state']['stringValue'])) {
+                    // Extract the state value from the user document
+                    $state = $user['fields']['state']['stringValue'];
+    
+                    // Increment the count for the state in the $usersByState array
+                    if (isset($usersByState[$state])) {
+                        $usersByState[$state]++;
+                    } else {
+                        $usersByState[$state] = 1;
+                    }
+                }
+                if (isset($user['fields']['city']) && !empty($user['fields']['city']['stringValue'])) {
+                    // Extract the city value from the user document
+                    $city = $user['fields']['city']['stringValue'];
+            
+                    // Increment the count for the city in the $usersByCity array
+                    if (isset($usersByCity[$city])) {
+                        $usersByCity[$city]++;
+                    } else {
+                        $usersByCity[$city] = 1;
+                    }
+                }
             }
     
-              // Iterate through each document in the users collection
-              foreach ($usersData['documents'] as $document) {
+            // Iterate through each document in the users collection
+            foreach ($usersData['documents'] as $document) {
                 // Extract user data from the document
                 $userData = $document['fields'];
     
                 // Add the user data to the array
                 $users[] = $userData;
             }
-
-             // Paginate the user data
-             $perPage = 10; // Number of items per page
-             $currentPage = request()->query('page', 1); // Get the current page from the query string
-             $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
-             $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
-             $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-                 $usersPaginated,
-                 count($users),
-                 $perPage,
-                 $currentPage,
-                 ['path' => url()->current()]
-             );
+    
+            // Paginate the user data
+            $perPage = 10; // Number of items per page
+            $currentPage = request()->query('page', 1); // Get the current page from the query string
+            $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
+            $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
+            $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+                $usersPaginated,
+                count($users),
+                $perPage,
+                $currentPage,
+                ['path' => url()->current()]
+            );
+    
             // Total users count
             $totalUsers = count($usersData['documents']);
     
-            return view('dashboard', compact('totalPhoto', 'totalStickers', 'totalUsers', 'totalComplains', 'totalPaidUsers','users','usersPaginated'));
+            return view('dashboard', compact('totalPhoto', 'totalStickers', 'totalUsers', 'totalComplains', 'totalPaidUsers', 'users', 'usersPaginated', 'usersByState', 'usersByCity'));
         } catch (\Exception $e) {
             // Handle error
             // You can log the error for debugging purposes
@@ -90,6 +120,7 @@ class VerifieldController extends Controller
             return redirect()->route('dashboard')->with('error', 'Failed to fetch data. Please try again.');
         }
     }
+    
 
     public function admin()
     {
@@ -131,6 +162,14 @@ public function adminstore(Request $request)
         return redirect()->back()->withErrors(['message' => 'Failed to save user'])->withInput();
     }
 }
+
+
+    public function showDeletionForm()
+    {
+        return view('delete');
+    }
+
+
 
     public function adminsedit(User $admin)
     {
@@ -230,6 +269,9 @@ public function adminstore(Request $request)
         }
     }
         
+
+
+
     
     public function home() {
         return view('welcome');

@@ -9,7 +9,8 @@
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon.png">
     <title>Dashboard | Genzee Baddies ~ Admin</title>
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xxxxxxx" crossorigin="anonymous" />
+
     <link href="{{asset('admin/css/bootstrap.css?x=1')}}" rel="stylesheet">
 
     <!--    <link href="{{asset('admin/css/chartist.css?x=1')}}" rel="stylesheet">-->
@@ -24,10 +25,17 @@
 
     <link rel="stylesheet" href="{{asset('admin/css/mytheme.css?x=6')}}" type="text/css" media="screen">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->http://127.0.0.1:8000/profile
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .percentage-badge {
+    font-size: 1.2em; /* Adjust font size as needed */
+    margin-left: 10px; /* Add margin to separate it from the state count */
+}
+    </style>
 </head>

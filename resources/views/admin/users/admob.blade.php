@@ -7,7 +7,7 @@
                 <h3 class="text-themecolor">Dashboard</h3>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/main">Home</a></li>
-                    <li class="breadcrumb-item active">AdMob Settings</li>
+                    <li class="breadcrumb-item active">Advert Settings</li>
                 </ol>
             </div>
         </div>
@@ -22,8 +22,16 @@
                         </div>
                         @endif
 
-                        <h4 class="card-title">Warning!</h4>
-                        <p class="card-text">Ads settings here are delicate Please dont Touch without proper understanding of the setting</p>
+                        <div class="card-body text-left"> <!-- Added text-left class -->
+                            <h4 class="card-title">How to Update Ads</h4>
+                            <p class="card-text">Please follow these steps carefully to update the ads:</p>
+                            <ol class="card-text">
+                                <li>Ensure you have the correct link and photo URL for the ad.</li>
+                                <li>Enter the new link and photo URL in the respective fields below.</li>
+                                <li>Click the "Update Ads" button to save the changes.</li>
+                            </ol>
+                        </div>
+                
                     </div>
                 </div>
             </div>
@@ -33,7 +41,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Admob Info</h4>
+                        <h4 class="card-title">Advert Info</h4>
                         {{--
                         <h6 class="card-subtitle">
                             How to get banner_ad_unit_id from AdMob:
@@ -49,11 +57,11 @@
                         </h6>
                         --}}
 
-                        <form method="post" action="{{ route('admob.update') }}">
+                        <form method="post" action="{{ route('advert.update') }}">
                             @csrf
 
                             <div class="form-group">
-                                @foreach($admobDetails as $fieldName => $fieldValue)
+                                @foreach($advertsDetails as $fieldName => $fieldValue)
                                 <label for="{{ $fieldName }}">{{ ucfirst($fieldName) }}:</label>
                                 <input type="text" class="form-control" id="{{ $fieldName }}" name="{{ $fieldName }}" value="{{ $fieldValue }}" />
                                 @endforeach
@@ -72,43 +80,5 @@
     </div>
     <!-- End Container fluid  -->
 
-    {{--
-    <div class="container">
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card">
-                        <div class="card-header bg-info text-white">Admob</div>
-                        @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                        @endif
-                    </div>
-
-                    @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                    @endif
-
-                    <div class="container">
-                        <h1>Edit Admob Details</h1>
-                        <form method="post" action="{{ route('admob.update') }}">
-                            @csrf
-                            <div class="form-group">
-                                @foreach($admobDetails as $fieldName => $fieldValue)
-                                <label for="{{ $fieldName }}">{{ ucfirst($fieldName) }}:</label>
-                                <input type="text" class="form-control" id="{{ $fieldName }}" name="{{ $fieldName }}" value="{{ $fieldValue }}" />
-                                @endforeach
-                            </div>
-                            <button type="submit" class="btn btn-primary">Update Admob</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    --}}
  @include('dash.footer')
 </div>

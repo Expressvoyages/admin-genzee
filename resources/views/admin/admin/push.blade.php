@@ -14,15 +14,15 @@
 
         <div class="card">
             <div class="card-body collapse show">
-                @if(session('error'))
+                @if(session('failureCount') > 0)
                 <div class="alert alert-danger">
-                    {{ session('error') }}
+                    {{ session('failureCount') }} notifications failed to send.
                 </div>
             @endif
             
-            @if(session('success'))
+            @if(session('successCount') > 0)
                 <div class="alert alert-success">
-                    {{ session('success') }}
+                    {{ session('successCount') }} notifications sent successfully.
                 </div>
             @endif
             <h4 class="card-title"> Send Notification</h4>
@@ -35,43 +35,35 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Send Push Notification</h4>
-                        <form action="{{route('bulksend')}}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('bulksend') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Title</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Notification Title" name="title">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title" placeholder="Enter Notification Title" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Message</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Notification Description" name="body" required>
+                                <label for="message">Message</label>
+                                <input type="text" class="form-control" id="message" placeholder="Enter Notification Description" name="body" required>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Image Url</label>
-                                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter image link" name="img">
+                                <label for="image-url">Image URL</label>
+                                <input type="url" class="form-control" id="image-url" placeholder="Enter image URL" name="img">
                             </div>
                             <button type="submit" class="btn btn-primary">Send Notification</button>
                         </form>
-                        <script>
-                            function loadPhoto(event) {
-                                var reader = new FileReader();
-                                reader.onload = function () {
-                                    var output = document.getElementById('photo');
-                                    output.src = reader.result;
-                                };
-                                reader.readAsDataURL(event.target.files[0]);
-                            }
-                        </script>
-                        
-                        
                     </div>
                 </div>
             </div>
         </div>
+        
 
+        
      
     </div>
     <!-- End Container fluid  -->
 </div>
+
+
 
 
 
