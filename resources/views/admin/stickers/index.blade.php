@@ -30,31 +30,46 @@
                         <h4 class="card-title m-b-0">Stickers</h4>
                     </div>
                     <div class="card-body collapse show">
+                        @if($stickerUrlsPaginated->count() > 0)
                         <div class="table-responsive">
                             <table class="table product-overview">
                                 <thead>
                                     <tr>
                                         <th>Sticker Image</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($stickers as $sticker)
-                                    <tr data-id="30">
+                                    @foreach ($stickerUrlsPaginated as $url)
+                                    <tr>
                                         <td>
-                                            <img src="{{ $sticker['images']['original']['url'] }}" alt="Sticker Image" style="max-width: 100px;" />
+                                            <img src="{{ $url }}" alt="Sticker Image" style="max-width: 100px;" />
                                         </td>
+                                        {{-- <td>
+                                            <form action="{{ route('stickers.destroy', ['url' => $url]) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td> --}}
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                         <div class="d-flex justify-content-center">
-                            {{ $stickers->links('vendor.pagination.bootstrap-4') }}
+                            {{ $stickerUrlsPaginated->links('vendor.pagination.bootstrap-4') }}
                         </div>
+                        @else
+                        <p>No stickers found.</p>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
+        
+        
+        
     </div>
     <!-- End Container fluid  -->
 </div>

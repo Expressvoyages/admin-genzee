@@ -200,6 +200,8 @@ class UserController extends Controller
                     'state' => ['stringValue' => $request->input('state') ?? $existingUserData['fields']['state']['stringValue'] ?? ''],
                     'smoking' => ['stringValue' => $request->input('smoking') ?? $existingUserData['fields']['smoking']['stringValue'] ?? ''],
                     'uid' => ['stringValue' => $request->input('uid') ?? $existingUserData['fields']['uid']['stringValue'] ?? ''],
+                    'referralId' => ['stringValue' => $request->input('referralId') ?? $existingUserData['fields']['referralId']['stringValue'] ?? ''],
+                    'referrerId' => ['stringValue' => $request->input('referrerId') ?? $existingUserData['fields']['referrerId']['stringValue'] ?? ''],
                     'verified' => ['booleanValue' => $verified],
                     'weight' => ['stringValue' => $request->input('weight') ?? $existingUserData['fields']['weight']['stringValue'] ?? ''],
                     'longitude' => ['stringValue' => $request->input('longitude') ?? $existingUserData['fields']['longitude']['stringValue'] ?? ''],
@@ -224,8 +226,86 @@ class UserController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+    public function referals(Request $request)
+    {
+        // Initialize GuzzleHTTP client
+        $client = new Client([
+            'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+        ]);
     
+        try {
+            // Send request to fetch users data
+            $response = $client->get('users');
+            $usersData = json_decode($response->getBody()->getContents(), true);
+    
+            $users = [];
+    
+            // Iterate through each document in the users collection
+            foreach ($usersData['documents'] as $document) {
+                // Extract user data from the document
+                $userData = $document['fields'];
+    
+                // Check if the user has a referrerId
+                if (isset($userData['referralId']['stringValue'])) {
+                    // Fetch referrals for this user
+                    $referrals = $this->fetchReferralsForUser($userData['referrerId']['stringValue'], $client);
 
+                    // Add user and their referrals to the list
+                    $users[] = [
+                        'name' => $userData['name']['stringValue'],
+                        'email' => $userData['email']['stringValue'],
+                        'referrals' => $referrals,
+                    ];
+                }
+            }
+    
+            // Pass user data to the view
+            return view('admin.users.referals', [
+                'users' => $users,
+            ]);
+        } catch (\Exception $e) {
+            // Handle error
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+    // Function to fetch referrals for a user
+    private function fetchReferralsForUser($referrerId, $client)
+    {
+        // Initialize an empty array to store referrals
+        $referrals = [];
+    
+        try {
+            // Send request to fetch referrals data for this referrerId
+            // Assuming your Firestore structure allows querying referrals by referrerId
+            // Adjust the Firestore query based on your actual database structure
+            $response = $client->get('users?where=referrerId==' . $referrerId);
+            $referralsData = json_decode($response->getBody()->getContents(), true);
+    
+            // Iterate through each document in the referrals collection
+            foreach ($referralsData['documents'] as $document) {
+                // Extract referral data from the document
+                $referralData = $document['fields'];
+    
+                // Add referral data to the array
+                $referrals[] = [
+                    'name' => $referralData['name']['stringValue'],
+                    'email' => $referralData['email']['stringValue'],
+                ];
+            }
+        } catch (\Exception $e) {
+            // Log the error or handle it as required
+            // Returning an empty array in case of error
+            return [];
+        }
+    
+        return $referrals;
+    }
+    
+    
+    
+    
+    
  public function destroy($Id)
 {
     // Initialize GuzzleHTTP client

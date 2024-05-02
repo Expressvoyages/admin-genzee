@@ -53,21 +53,37 @@
                             <table class="table product-overview">
                                 <thead>
                                     <tr>
+                                        <th>Select</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  <th>age</th> @endif
-                                        <th>phone Number</th>
+                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  
+                                            <th>Age</th> 
+                                        @endif
+                                        <th>Phone Number</th>
                                         <th>City / State</th>
-                                   
-                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  <th>Action</th> @endif
+                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  
+                                            <th>Action</th> 
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($usersPaginated as $user)
                                     <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input user-checkbox" name="selectedUser" id="checkbox{{ $loop->index }}" value="{{ $user['uid']['stringValue'] }}">
+                                                <label class="form-check-label" for="checkbox{{ $loop->index }}"></label>
+                                            </div>
+                                        </td>
+                                        
+                                        
+                                      
+                                        
                                         <td>{{ $user['name']['stringValue'] }}</td>
                                         <td>{{ $user['email']['stringValue'] }}</td>
-                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   <td>{{ $user['age']['stringValue'] }}</td> @endif
+                                        @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   
+                                            <td>{{ $user['age']['stringValue'] }}</td> 
+                                        @endif
                                         <td>{{ $user['phoneNumber']['stringValue'] }}</td>
                                         <td>{{ $user['city']['stringValue'] }} - {{ $user['state']['stringValue'] }}</td>
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
@@ -109,45 +125,54 @@
 @include('dash.footer')
 
 <script>
-    $(document).ready(function () {
-        $('#exportrBtn').click(function () {
-            var csv = [];
-            var rows = $('.table tbody tr');
-            rows.each(function (index, row) {
-                var rowData = [];
-                // Exclude the last column (Action) from each row
-                $(row).find('td:not(:last-child)').each(function (index, column) {
-                    rowData.push($(column).text());
-                });
-                csv.push(rowData.join(','));
+  $(document).ready(function () {
+    $('#exportrBtn').click(function () {
+        var csv = [];
+        var selectedUserIds = [];
+        // Iterate over each checked checkbox and get the corresponding user data
+        $('.user-checkbox:checked').each(function (index, checkbox) {
+            var row = $(checkbox).closest('tr');
+            var rowData = [];
+            // Exclude the first column (checkbox) and last column (Action) from each row
+            row.find('td:not(:first-child, :last-child)').each(function (index, column) {
+                rowData.push($(column).text());
             });
-            downloadCSV(csv.join('\n'), '(Userdata).csv');
+            csv.push(rowData.join(','));
+            selectedUserIds.push($(checkbox).val());
         });
-
-        function downloadCSV(csv, filename) {
-            var csvFile;
-            var downloadLink;
-
-            // CSV file
-            csvFile = new Blob([csv], { type: 'text/csv' });
-
-            // Download link
-            downloadLink = document.createElement('a');
-
-            // File name
-            downloadLink.download = filename;
-
-            // Create a link to the file
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-
-            // Hide download link
-            downloadLink.style.display = 'none';
-
-            // Add the link to DOM
-            document.body.appendChild(downloadLink);
-
-            // Click download link
-            downloadLink.click();
+        // If no users are selected, show an alert
+        if (selectedUserIds.length === 0) {
+            alert('Please select at least one user to export.');
+            return;
         }
+        downloadCSV(csv.join('\n'), '(SelectedUsersData).csv');
     });
+
+    function downloadCSV(csv, filename) {
+        var csvFile;
+        var downloadLink;
+
+        // CSV file
+        csvFile = new Blob([csv], { type: 'text/csv' });
+
+        // Download link
+        downloadLink = document.createElement('a');
+
+        // File name
+        downloadLink.download = filename;
+
+        // Create a link to the file
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+
+        // Hide download link
+        downloadLink.style.display = 'none';
+
+        // Add the link to DOM
+        document.body.appendChild(downloadLink);
+
+        // Click download link
+        downloadLink.click();
+    }
+});
+
 </script>

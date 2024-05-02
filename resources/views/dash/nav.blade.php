@@ -64,6 +64,14 @@
                         <span class="hide-menu">All Users</span>
                     </a>
                 </li>
+                @if(Auth::user()->user_role != 4 )
+                <li>
+                    <a class="waves-effect waves-dark" href="{{route('users.referal')}}" aria-expanded="false">
+                        <i class="ti-image"></i>
+                        <span class="hide-menu">Referals</span>
+                    </a>
+                </li>
+                @endif
                 @endif
                 {{-- @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                 <li>

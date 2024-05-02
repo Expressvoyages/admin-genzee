@@ -68,12 +68,14 @@ Route::prefix('admin')->group(function () {
     // Stickers
     Route::get('/stickers', [StickersController::class, 'index'])->name('admin.stickers');
     Route::post('/stickers', [StickersController::class, 'store'])->name('stickers.store');
-    Route::delete('/stickers/{sticker}', [StickersController::class, 'destroy'])->name('stickers.destroy');
+    Route::delete('/stickers/{url}', [StickersController::class, 'destroy'])->name('stickers.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/referals', [UserController::class, 'referals'])->name('users.referal');
+    
     
     
     Route::get('/Reports', [FirebaseController::class, 'index2'])->name('report.index');
