@@ -15,7 +15,7 @@ class PaymentController extends Controller
 
     // Process webhook payload
     $data = json_decode($payload, true);
-
+ 
     // Update database with payment details
     Payment::create([
         'transaction_id' => $data['data']['id'],
