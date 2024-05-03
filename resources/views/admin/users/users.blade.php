@@ -76,9 +76,6 @@
                                             </div>
                                         </td>
                                         
-                                        
-                                      
-                                        
                                         <td>{{ $user['name']['stringValue'] }}</td>
                                         <td>{{ $user['email']['stringValue'] }}</td>
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   
