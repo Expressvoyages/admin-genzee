@@ -117,7 +117,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-row">
                             <div class="round round-lg align-self-center round-info">
-                                <i class="ti-user"></i>
+                                <i class="fa fa-user"></i>
                             </div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-light">{{ $totalUsers }}</h3>
@@ -134,11 +134,11 @@
                     <div class="card-body">
                         <div class="d-flex flex-row">
                             <div class="round round-lg align-self-center round-warning">
-                                <i class="fa fa-user"></i>
+                                <i class="far fa-image"></i>
                             </div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-lgiht">{{ $totalPhoto }}</h3>
-                                <h5 class="text-muted m-b-0">Total photos</h5>
+                                <h5 class="text-muted m-b-0"><a href="{{route('fetch.images')}}">Total photos</a></h5>
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-row">
-                            <div class="round round-lg align-self-center round-primary"><i class="ti-comment-alt"></i></div>
+                            <div class="round round-lg align-self-center round-primary">
+                                <i class="far fa-smile"></i>
+                       
+                            </div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-lgiht">{{ $totalStickers }}</h3>
                                 <h5 class="text-muted m-b-0"> <a href="{{route('admin.stickers')}}">Total Stickers</a></h5>
@@ -165,7 +168,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-row">
-                            <div class="round round-lg align-self-center round-danger"><i class="ti-comments"></i></div>
+                            <div class="round round-lg align-self-center round-danger"> <i class="far fa-frown"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0 font-lgiht">{{ $totalComplains }}</h3>
                                 <h5 class="text-muted m-b-0"> <a href="{{route('report.index')}}"> Total Complains</a></h5>

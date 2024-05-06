@@ -38,16 +38,17 @@ File: scss
 
 /*Preloader*/
 
-@import url(/html/admin/css/icons/font-awesome/css/font-awesome.min.css);
-@import url(/html/admin/css/icons/simple-line-icons/css/simple-line-icons.css);
-@import url(/html/admin/css/icons/weather-icons/css/weather-icons.min.css);
-@import url(/html/admin/css/icons/linea-icons/linea.css);
-@import url(/html/admin/css/icons/themify-icons/themify-icons.css);
-@import url(/html/admin/css/icons/flag-icon-css/flag-icon.min.css);
-@import url(/html/admin/css/icons/material-design-iconic-font/css/materialdesignicons.min.css?x=1);
-@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
-@import url(/html/admin/css/spinners.css);
-@import url(/html/admin/css/animate.css);
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+@import url('https://cdn.jsdelivr.net/npm/simple-line-icons@2.5.5/css/simple-line-icons.css');
+@import url('https://cdn.jsdelivr.net/npm/weather-icons/css/weather-icons.min.css');
+@import url('https://cdn.jsdelivr.net/npm/linea-icons/css/linea.css');
+@import url('https://cdn.jsdelivr.net/npm/themify-icons@1.0.1/css/themify-icons.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/material-design-icons-iconfont/6.2.0/css/materialdesignicons.min.css');
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+@import url('/html/admin/css/spinners.css');
+@import url('/html/admin/css/animate.css');
+
 .preloader {
     width: 100%;
     height: 100%;

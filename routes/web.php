@@ -20,9 +20,9 @@ Route::post('/help', [HelpPageController::class, 'store'])->name('help.store');
 
 
 
-    Route::post('send',[PushNotificationController::class, 'bulksend'])->name('bulksend');
-    Route::get('all-notifications', [PushNotificationController::class, 'index']);
-    Route::get('get-notification-form', [PushNotificationController::class, 'create']);
+Route::post('send',[PushNotificationController::class, 'bulksend'])->name('bulksend');
+Route::get('all-notifications', [PushNotificationController::class, 'index']);
+Route::get('get-notification-form', [PushNotificationController::class, 'create']);
 
 
 
@@ -31,13 +31,14 @@ Route::get('/admininistrators', [VerifieldController::class, 'admin'])->name('ad
 Route::get('/admin-role', [VerifieldController::class, 'role'])->name('roles');
 Route::post('/admins', [VerifieldController::class, 'adminstore'])->name('admins.store');
 Route::get('/admins/{id}/edit', [VerifieldController::class, 'adminsedit'])->name('admins.edit');
-Route::put('/admins', [VerifieldController::class, 'admiupdate'])->name('admins.update');
+Route::put('/admins/{id}', [VerifieldController::class, 'admiupdate'])->name('admins.update');
 Route::delete('/admins/{id}', [VerifieldController::class, 'admindestroy'])->name('admins.destroy');
 Route::post('/send-notification', [VerifieldController::class, 'sendNotification'])->name('notify');
 Route::get('/push-notification', [VerifieldController::class, 'push'])->name('admins.push');
 Route::get('/help', [VerifieldController::class, 'help'])->name('admins.help');
 Route::get('/payment', [VerifieldController::class, 'payment'])->name('admins.payment');
 Route::get('/delete-account-request', [VerifieldController::class, 'showDeletionForm'])->name('account.delete.form');
+Route::get('/fetch-images', [VerifieldController::class, 'fetchImages'])->name('fetch.images');
 
 
 

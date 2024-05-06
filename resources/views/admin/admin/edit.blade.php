@@ -1,26 +1,35 @@
-@include('dash.head') @include('dash.nav') @include('dash.header')
+@include('dash.head')
+@include('dash.nav')
+@include('dash.header')
 
 <div class="container">
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif 
     <div class="row justify-content-center mt-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-info text-white">Administrator</div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admins.update') }}">
+                    <form method="post" action="{{ route('admins.update', $admin->id) }}">
+
                         @csrf @method('PUT')
                         <div class="form-group">
                             <label for="name">Name:</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ $admin->name }}" required />
+                            <input type="text" class="form-control" id="name" name="name" value="{{ $admin->name ?? '' }}" required />
                         </div>
                         <div class="form-group">
                             <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $admin->email }}" required />
+                            <input type="email" class="form-control" id="email" name="email" value="{{ $admin->email ?? '' }}" required />
                         </div>
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" />
-                            <small class="form-text text-muted">Leave this field blank to keep the existing password.</small>
-                        </div>
+                    
                         <div class="form-group">
                             <label for="user_role">User Role:</label>
                             <select class="form-control" id="user_role" name="user_role" required>

@@ -25,7 +25,9 @@
 
                       <span>
                         
-                          <h3  class="light-logo"></h3>
+                        <span> <!-- Logo text --> <!-- Light Logo text -->
+                            <img src="/img/admin-logo-text.png" class="light-logo" alt="homepage" />
+                        </span>
                       </span>
                   </a>
               </div>

@@ -7,10 +7,13 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use App\Models\Payment;
 use App\Models\HelpPage;
+use Google\Type\DateTime;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use App\Models\DeletionRequest;
 use App\Http\Controllers\Controller;
+use Google\Cloud\Storage\StorageClient;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Client\RequestException;
 
@@ -20,6 +23,9 @@ class VerifieldController extends Controller
 
 
     public function dashboard() {
+
+
+        
         // Initialize GuzzleHTTP client
         $client = new Client([
             'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
@@ -138,7 +144,7 @@ public function adminstore(Request $request)
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:6',
         'user_role' => 'required',
-        'description' => 'required',
+    
     ]);
 
     if ($validator->fails()) {
@@ -151,12 +157,12 @@ public function adminstore(Request $request)
     $user->email = $request->email;
     $user->password = bcrypt($request->password);
     $user->user_role = $request->user_role;
-    $user->description = $request->description;
+
 
     // Check if user saved successfully
     if ($user->save()) {
         // Redirect with success message
-        return redirect()->route('admins.index')->with('success', 'User created successfully');
+        return redirect()->route('admininistrators')->with('success', 'User created successfully');
     } else {
         // Handle error
         return redirect()->back()->withErrors(['message' => 'Failed to save user'])->withInput();
@@ -169,38 +175,135 @@ public function adminstore(Request $request)
         return view('delete');
     }
 
-
-
-    public function adminsedit(User $admin)
+    public function fetchImages()
     {
+        // Initialize GuzzleHTTP client
+        $client = new Client();
+    
+        // Firebase Storage URL for your bucket
+        $bucketName = 'genzee-baddies-1.appspot.com';
+        $storageUrl = 'https://firebasestorage.googleapis.com/v0/b/' . $bucketName . '/o/';
+    
+        // Store image URLs in an array
+        $imageUrls = [];
+    
+        // Define folders to fetch images from
+        $folders = ['chatImages', 'images', 'user_faces'];
+    
+        foreach ($folders as $folder) {
+            // Send a GET request to list all items in the folder
+            $folderUrl = $storageUrl . $folder . '?delimiter=/';
+    
+            try {
+                $response = $client->get($folderUrl);
+    
+                // Check if the request was successful
+                if ($response->getStatusCode() == 200) {
+                    // Decode the response JSON
+                    $data = json_decode($response->getBody(), true);
+    
+                    // Debugging: Dump the content of the folder
+                    dump($data);
+    
+                    // Iterate over the items in the response
+                    foreach ($data['items'] as $item) {
+                        // Check if the item is an image (you may need more robust checks depending on your needs)
+                        if (isset($item['contentType']) && strpos($item['contentType'], 'image/') !== false) {
+                            // Get the download URL for the image
+                            $imageUrl = $item['mediaLink'];
+    
+                            // Add image URL to the array with folder as key
+                            $imageUrls[$folder][] = $imageUrl;
+                        }
+                    }
+                } else {
+                    // Handle errors
+                    return response()->json(['error' => 'Failed to fetch images from folder: ' . $folder], $response->getStatusCode());
+                }
+            } catch (ClientException $e) {
+                // Handle 404 error (Not Found)
+                if ($e->getResponse()->getStatusCode() == 404) {
+                    // Log the error or continue to the next folder
+                    continue;
+                } else {
+                    // Handle other client errors
+                    return response()->json(['error' => 'Client error: ' . $e->getMessage()], $e->getResponse()->getStatusCode());
+                }
+            } catch (Exception $e) {
+                // Handle other exceptions
+                return response()->json(['error' => 'Error: ' . $e->getMessage()]);
+            }
+        }
+    
+        // Pass image URLs to the view, categorized by folder
+        return view('admin.users.images', compact('imageUrls'));
+    }
+    
+    
+    
+    
+    public function adminsedit($id)
+    {
+        // Fetch the admin data from the database
+        $admin = User::find($id);
+        
+        // Check if $admin exists
+        if (!$admin) {
+            // If $admin is null, return an error message or redirect to an error page
+            return redirect()->route('admininistrators')->with('error', 'Admin not found.');
+        }
+    
+        // If $admin exists, pass it to the view
         return view('admin.admin.edit', compact('admin'));
     }
+    
 
-    public function admiupdate(Request $request, User $admin)
+    public function admiupdate(Request $request, $id)
     {
-        // Validate request
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $admin->id,
-            'user_role' => 'required',
-            'description' => 'required',
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'user_role' => 'required|in:1,2,3,4',
         ]);
-
-        // Update admin
-        $admin->update($request->all());
-
-        // Redirect to admin index page
-        return redirect()->route('admins.index');
+    
+        // Fetch the admin data from the database
+        $admin = User::find($id);
+    
+        // Check if $admin exists
+        if (!$admin) {
+            // If $admin is null, return an error message or redirect to an error page
+            return redirect()->route('admininistrators')->with('error', 'Admin not found.');
+        }
+    
+        // Update the admin data with the validated request data
+        $admin->name = $validatedData['name'];
+        $admin->email = $validatedData['email'];
+        $admin->user_role = $validatedData['user_role'];
+        $admin->save();
+    
+        // Redirect back to the admin edit page with a success message
+        return redirect()->route('admininistrators')->with('success', 'Admin updated successfully.');
     }
-
-    public function admindestroy(User $admin)
+    
+    public function admindestroy($id)
     {
-        // Delete admin
-        $admin->delete();
-
-        // Redirect back
-        return redirect()->back()->with('success', 'Admin deleted successfully.');
+        // Find the user by ID
+        $user = User::find($id);
+    
+        // Check if $user exists
+        if (!$user) {
+            // If $user is null, return an error message or redirect to an error page
+            return redirect()->route('admininistrators')->with('error', 'User not found.');
+        }
+    
+        // Delete the user
+        $user->delete();
+    
+        // Redirect back to the administrators page with a success message
+        return redirect()->route('admininistrators')->with('success', 'User deleted successfully.');
     }
+   
     public function role()
     {
         // Fetch users with specific roles (assuming roles are stored as numerical values)
