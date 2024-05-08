@@ -226,6 +226,7 @@ class UserController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+    
     public function referals(Request $request)
     {
         // Initialize GuzzleHTTP client
@@ -238,70 +239,80 @@ class UserController extends Controller
             $response = $client->get('users');
             $usersData = json_decode($response->getBody()->getContents(), true);
     
+            // Initialize an array to hold referral information
+            $referralsMap = [];
+    
+            // Initialize an array to hold users with their referrals
             $users = [];
     
-            // Iterate through each document in the users collection
+            // Initialize total referrals count
+            $totalReferrals = 0;
+    
+            // Build Referral Map: Iterate through the retrieved user documents
             foreach ($usersData['documents'] as $document) {
                 // Extract user data from the document
                 $userData = $document['fields'];
+                $userId = $document['name']; // Assuming this gives the user ID
     
                 // Check if the user has a referrerId
+                if (isset($userData['referrerId']['stringValue']) && !empty($userData['referrerId']['stringValue'])) {
+                    $referrerId = $userData['referrerId']['stringValue'];
+    
+                    // Get the name of the user
+                    $userName = isset($userData['name']['stringValue']) ? $userData['name']['stringValue'] : 'Unknown';
+    
+                    // Add the current user's name to the referrer's list of referrals
+                    $referralsMap[$referrerId][] = $userName;
+    
+                    // Increment total referrals count
+                    $totalReferrals++;
+                }
+            }
+    
+            // Iterate through the users again and attach referrals to each user
+            foreach ($usersData['documents'] as $document) {
+                // Extract user data from the document
+                $userData = $document['fields'];
+                $userId = $document['name']; // Assuming this gives the user ID
+    
+                // Get the user's name from the Firestore document fields
+                $userName = isset($userData['name']['stringValue']) ? $userData['name']['stringValue'] : 'Unknown';
+    
+                // Check if the user has a referralId
                 if (isset($userData['referralId']['stringValue'])) {
-                    // Fetch referrals for this user
-                    $referrals = $this->fetchReferralsForUser($userData['referrerId']['stringValue'], $client);
-
+                    $referralId = $userData['referralId']['stringValue'];
+    
+                    // Get referrals for this user
+                    $referrals = isset($referralsMap[$referralId]) ? $referralsMap[$referralId] : [];
+    
                     // Add user and their referrals to the list
                     $users[] = [
-                        'name' => $userData['name']['stringValue'],
+                        'user_id' => $userId,
+                        'name' => $userName, // Use the extracted user's name
                         'email' => $userData['email']['stringValue'],
-                        'referrals' => $referrals,
+                        'referrals' => $referrals, // Array of referral names
+                    ];
+                } elseif (empty($userData['referralId']['stringValue'])) {
+                    // If referralId is empty, treat it as no referrals
+                    $users[] = [
+                        'user_id' => $userId,
+                        'name' => $userName,
+                        'email' => $userData['email']['stringValue'],
+                        'referrals' => [],
                     ];
                 }
             }
     
-            // Pass user data to the view
+            // Pass user data, total referrals count, and the GuzzleHTTP client to the view
             return view('admin.users.referals', [
                 'users' => $users,
+                'totalReferrals' => $totalReferrals,
             ]);
         } catch (\Exception $e) {
             // Handle error
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
-    // Function to fetch referrals for a user
-    private function fetchReferralsForUser($referrerId, $client)
-    {
-        // Initialize an empty array to store referrals
-        $referrals = [];
-    
-        try {
-            // Send request to fetch referrals data for this referrerId
-            // Assuming your Firestore structure allows querying referrals by referrerId
-            // Adjust the Firestore query based on your actual database structure
-            $response = $client->get('users?where=referrerId==' . $referrerId);
-            $referralsData = json_decode($response->getBody()->getContents(), true);
-    
-            // Iterate through each document in the referrals collection
-            foreach ($referralsData['documents'] as $document) {
-                // Extract referral data from the document
-                $referralData = $document['fields'];
-    
-                // Add referral data to the array
-                $referrals[] = [
-                    'name' => $referralData['name']['stringValue'],
-                    'email' => $referralData['email']['stringValue'],
-                ];
-            }
-        } catch (\Exception $e) {
-            // Log the error or handle it as required
-            // Returning an empty array in case of error
-            return [];
-        }
-    
-        return $referrals;
-    }
-    
     
     
     

@@ -34,46 +34,47 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="card-title m-b-0">All Users</h4>
-                          
+                            <h4 class="card-title m-b-0">All Referals</h4>
+                            <button id="exportBtn" class="btn btn-success">Export CSV</button>
                         </div>
-                        
-        
                     </div>
                     <div class="card-body collapse show">
-                      <div class="table-responsive">
-                          <table class="table product-overview">
-                              <thead>
-                                  <tr>
-                                      <th>User Name</th>
-                                      <th>User Email</th>
-                                      <th>Referrals</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  @foreach ($users as $user)
-                                  <tr>
-                                      <td>{{ $user['name'] }}</td>
-                                      <td>{{ $user['email'] }}</td>
-                                      <td>
-                                          @if (count($user['referrals']) > 0)
-                                              <ul>
-                                                  @foreach ($user['referrals'] as $referral)
-                                                  <li>{{ $referral['name'] }} - {{ $referral['email'] }}</li>
-                                                  @endforeach
-                                              </ul>
-                                          @else
-                                              No referrals
-                                          @endif
-                                      </td>
-                                  </tr>
-                                  @endforeach
-                              </tbody>
-                          </table>
-                      </div>
-                  </div>
-                  
-                  
+                        <div class="table-responsive">
+                            <table class="table product-overview">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>User Email</th>
+                                        <th>Referrals <span class="badge badge-primary">{{ $totalReferrals }}</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($users as $user)
+                                    <tr>
+                                        <td>
+                                            {{ $user['name'] }}
+                                            @if (count($user['referrals']) > 0)
+                                            <span class="badge badge-info">{{ count($user['referrals']) }}</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $user['email'] }}</td>
+                                        <td>
+                                            @if (count($user['referrals']) > 0 && $user['referrals'] !== [''])
+                                            <ul>
+                                                @foreach ($user['referrals'] as $referral)
+                                                <li>{{ $referral }}</li>
+                                                @endforeach
+                                            </ul>
+                                            @else
+                                            No referrals
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,26 +82,21 @@
     <!-- End Container fluid  -->
 </div>
 
-
-
-
-
 @include('dash.footer')
 
 <script>
     $(document).ready(function () {
-        $('#exportrBtn').click(function () {
+        $('#exportBtn').click(function () {
             var csv = [];
             var rows = $('.table tbody tr');
             rows.each(function (index, row) {
                 var rowData = [];
-                // Exclude the last column (Action) from each row
-                $(row).find('td:not(:last-child)').each(function (index, column) {
+                $(row).find('td').each(function (index, column) {
                     rowData.push($(column).text());
                 });
                 csv.push(rowData.join(','));
             });
-            downloadCSV(csv.join('\n'), '(Userdata).csv');
+            downloadCSV(csv.join('\n'), 'referals.csv');
         });
 
         function downloadCSV(csv, filename) {

@@ -15,8 +15,8 @@ use App\Http\Controllers\Controller;
 use Google\Cloud\Storage\StorageClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Client\RequestException;
-
+// use Illuminate\Http\Client\RequestException;
+use GuzzleHttp\Exception\RequestException;
 
 class VerifieldController extends Controller
 {
@@ -174,70 +174,92 @@ public function adminstore(Request $request)
     {
         return view('delete');
     }
-
-    public function fetchImages()
+    public function fetchImages(Request $request)
     {
-        // Initialize GuzzleHTTP client
-        $client = new Client();
-    
-        // Firebase Storage URL for your bucket
-        $bucketName = 'genzee-baddies-1.appspot.com';
-        $storageUrl = 'https://firebasestorage.googleapis.com/v0/b/' . $bucketName . '/o/';
-    
-        // Store image URLs in an array
-        $imageUrls = [];
-    
-        // Define folders to fetch images from
-        $folders = ['chatImages', 'images', 'user_faces'];
-    
-        foreach ($folders as $folder) {
-            // Send a GET request to list all items in the folder
-            $folderUrl = $storageUrl . $folder . '?delimiter=/';
-    
+        
+            // Initialize GuzzleHTTP client
+            $client = new Client([
+                'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+            ]);
+        
             try {
-                $response = $client->get($folderUrl);
-    
-                // Check if the request was successful
-                if ($response->getStatusCode() == 200) {
-                    // Decode the response JSON
-                    $data = json_decode($response->getBody(), true);
-    
-                    // Debugging: Dump the content of the folder
-                    dump($data);
-    
-                    // Iterate over the items in the response
-                    foreach ($data['items'] as $item) {
-                        // Check if the item is an image (you may need more robust checks depending on your needs)
-                        if (isset($item['contentType']) && strpos($item['contentType'], 'image/') !== false) {
-                            // Get the download URL for the image
-                            $imageUrl = $item['mediaLink'];
-    
-                            // Add image URL to the array with folder as key
-                            $imageUrls[$folder][] = $imageUrl;
-                        }
-                    }
-                } else {
-                    // Handle errors
-                    return response()->json(['error' => 'Failed to fetch images from folder: ' . $folder], $response->getStatusCode());
+                // Send request to fetch users data
+                $response = $client->get('users');
+                $usersData = json_decode($response->getBody()->getContents(), true);
+        
+                $users = [];
+        
+                // Iterate through each document in the users collection
+                foreach ($usersData['documents'] as $document) {
+                    // Extract user data from the document
+                    $userData = $document['fields'];
+        
+                    // Add the user data to the array
+                    $users[] = $userData;
                 }
-            } catch (ClientException $e) {
-                // Handle 404 error (Not Found)
-                if ($e->getResponse()->getStatusCode() == 404) {
-                    // Log the error or continue to the next folder
-                    continue;
-                } else {
-                    // Handle other client errors
-                    return response()->json(['error' => 'Client error: ' . $e->getMessage()], $e->getResponse()->getStatusCode());
+        
+                // Filter users based on search query
+                $search = $request->input('search');
+                if ($search) {
+                    $users = array_filter($users, function ($user) use ($search) {
+                        return stripos($user['name']['stringValue'], $search) !== false ||
+                               stripos($user['email']['stringValue'], $search) !== false;
+                    });
                 }
-            } catch (Exception $e) {
-                // Handle other exceptions
-                return response()->json(['error' => 'Error: ' . $e->getMessage()]);
+        
+                // Paginate the user data
+                $perPage = 10; // Number of items per page
+                $currentPage = $request->query('page', 1); // Get the current page from the query string
+                $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
+                $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
+                $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $usersPaginated,
+                    count($users),
+                    $perPage,
+                    $currentPage,
+                    ['path' => url()->current()]
+                );
+        
+                // Pass user data to the view
+                return view('admin.users.images', [
+                    'users' => $users, // Pass the $users variable to the view
+                    'usersPaginated' => $usersPaginated,
+                ]);
+            } catch (\Exception $e) {
+                // Handle error
+                return response()->json(['error' => $e->getMessage()], 500);
             }
-        }
     
-        // Pass image URLs to the view, categorized by folder
-        return view('admin.users.images', compact('imageUrls'));
+      
     }
+    
+    public function deleteImage($userId, $imageUrl)
+    {
+       // Initialize GuzzleHTTP client
+    $client = new Client([
+        'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+    ]);
+
+    try {
+        // Send DELETE request to delete image
+        $response = $client->delete("users/{$userId}/images/{$imageUrl}");
+
+        // Check if the request was successful
+        if ($response->getStatusCode() === 204) {
+            // Image successfully deleted, redirect back with a success message
+            return back()->with('success', 'Image deleted successfully.');
+        } else {
+            // Failed to delete the image, return an error message
+            return back()->with('error', 'Failed to delete image.');
+        }
+    } catch (RequestException $e) {
+        // Handle request exception
+        $errorMessage = $e->getResponse()->getBody()->getContents();
+        return back()->with('error', 'Failed to delete image: ' . $errorMessage);
+    }
+    }
+    
+
     
     
     

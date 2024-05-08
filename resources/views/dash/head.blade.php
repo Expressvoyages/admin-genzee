@@ -45,6 +45,20 @@
     max-height: 670px; /* Set the maximum height of the sidebar */
     overflow-y: auto; /* Enable vertical scrolling */
 }
+.user-image {
+    width: 100px; /* Adjust the size of the image as desired */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.image-container {
+    display: inline-block; /* Display images and delete icons inline */
+    margin-right: 10px; /* Add some spacing between each image and delete icon */
+}
+
+.delete-icon {
+    margin-top: 5px; /* Adjust the spacing between the image and delete icon */
+}
+
 
     </style>
 </head>

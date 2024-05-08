@@ -39,6 +39,8 @@ Route::get('/help', [VerifieldController::class, 'help'])->name('admins.help');
 Route::get('/payment', [VerifieldController::class, 'payment'])->name('admins.payment');
 Route::get('/delete-account-request', [VerifieldController::class, 'showDeletionForm'])->name('account.delete.form');
 Route::get('/fetch-images', [VerifieldController::class, 'fetchImages'])->name('fetch.images');
+Route::delete('/users/{userId}/images/{imageUrl}', [VerifieldController::class, 'deleteImage'])->name('delete.image');
+
 
 
 
