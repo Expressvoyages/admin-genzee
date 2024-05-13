@@ -82,15 +82,7 @@
                                         </div>
                                      
                                         
-                                        {{-- <div class="form-group m-2">
-                                            <label for="gender">Gender</label>
-                                            <select style="width: 180px;" class="form-control" name="gender" id="gender"  >
-                                                <option value="male" @if($user['gender'] === 'male') selected @endif>Male</option>
-                                                <option value="female" @if($user['gender'] === 'female') selected @endif>Female</option>
-                                            </select>
-                                            
-                                        </div>
-                                         --}}
+                                 
                                         
                                         
                                         <div class="form-group m-2">
@@ -147,6 +139,18 @@
                                             <input type="text" class="form-control" name="uid" id="uid" value="{{ $user['uid']['stringValue'] }}" readonly>
                                         </div>
                                         
+                                        @foreach($user['profileImage']['arrayValue']['values'] as $image)
+                                        <div class="image-container">
+                                            <img src="{{ $image['stringValue'] }}" alt="Existing Image" class="existing-image">
+                                            <button type="button" class="close-icon" onclick="removeImage(this, '{{ $image['stringValue'] }}')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                    
+                                   <!-- Hidden input field for deleted images -->
+                             <input type="hidden" name="deletedImages[]" id="deletedImages">
+
                                     </div>
                                 </div>
                                 
@@ -168,6 +172,43 @@
 
 
  @include('dash.footer')
+ <style>
+    .image-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.existing-image {
+    width: 100px; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+ </style>
+ <script>
+      function removeImage(button, imageUrl) {
+        var imageContainer = button.parentElement;
+        imageContainer.remove();
+
+        // Append the URL of the removed image to the hidden input field
+        var deletedImagesInput = document.getElementById('deletedImages');
+        var deletedImages = deletedImagesInput.value.split(',');
+        deletedImages.push(imageUrl);
+        deletedImagesInput.value = deletedImages.join(',');
+    }
+</script>
 </div>
 
 

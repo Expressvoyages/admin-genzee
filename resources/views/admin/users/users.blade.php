@@ -61,6 +61,7 @@
                                         @endif
                                         <th>Phone Number</th>
                                         <th>City / State</th>
+                                      
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  
                                             <th>Action</th> 
                                         @endif
@@ -83,6 +84,25 @@
                                         @endif
                                         <td>{{ $user['phoneNumber']['stringValue'] }}</td>
                                         <td>{{ $user['city']['stringValue'] }} - {{ $user['state']['stringValue'] }}</td>
+                                        {{-- <td>
+                                            @if (isset($user['profileImage']['arrayValue']['values']))
+                                                <div class="image-gallery">
+                                                    @foreach ($user['profileImage']['arrayValue']['values'] as $image)
+                                                        <div class="image-container">
+                                                            <a href="{{ $image['stringValue'] }}" data-lightbox="user-images">
+                                                                <img src="{{ $image['stringValue'] }}" alt="User Image" class="user-image">
+                                                            </a>
+                                                            <a href="{{ route('delete.image', ['userId' => $user['uid']['stringValue'], 'imageUrl' => urlencode($image['stringValue'])]) }}" class="delete-icon" onclick="return confirm('Are you sure you want to delete this image?')">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                No images
+                                            @endif
+                                        </td> --}}
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                                         <td>
                                             <div class="btn-group" role="group" aria-label="User Actions">

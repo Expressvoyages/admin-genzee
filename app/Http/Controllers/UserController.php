@@ -112,11 +112,9 @@ class UserController extends Controller
             $notificationMatches = isset($existingUserData['fields']['notificationMatches']) ? $existingUserData['fields']['notificationMatches']['booleanValue'] : false;
             $notificationViews = isset($existingUserData['fields']['notificationViews']) ? $existingUserData['fields']['notificationViews']['booleanValue'] : false;
             $online = isset($existingUserData['fields']['online']) ? $existingUserData['fields']['online']['booleanValue'] : false;
-            
-
-
+    
             // Handle array fields
-            $arrayFields = ['blockedList', 'chatList', 'hobbies', 'languages', 'likes', 'matches', 'profileImage', 'profileViews'];
+            $arrayFields = ['blockedList', 'chatList', 'hobbies', 'languages', 'likes', 'matches','profileImage','profileViews'];
             foreach ($arrayFields as $field) {
                 if (isset($existingUserData['fields'][$field]['arrayValue']['values'])) {
                     // If the field exists in the Firebase data, use its value
@@ -128,21 +126,19 @@ class UserController extends Controller
                     ${$field} = [];
                 }
             }
-
-
-        // Handle lastOnline timestamp
-        $lastOnline = isset($existingUserData['fields']['lastOnline']['timestampValue']) ? $existingUserData['fields']['lastOnline']['timestampValue'] : null;
-
-                    
+    
+            // Handle lastOnline timestamp
+            $lastOnline = isset($existingUserData['fields']['lastOnline']['timestampValue']) ? $existingUserData['fields']['lastOnline']['timestampValue'] : null;
+    
             // Handle longitude as a number
             $longitude = isset($existingUserData['fields']['longitude']['doubleValue']) ? $existingUserData['fields']['longitude']['doubleValue'] : null;
             $latitude = isset($existingUserData['fields']['latitude']['doubleValue']) ? $existingUserData['fields']['latitude']['doubleValue'] : null;
-            
-
+    
+       
+    
             // Prepare the user data to be updated
             $userData = [
                 'fields' => [
-                   
                     'blockedList' => ['arrayValue' => ['values' => array_map(function ($value) {
                         return ['stringValue' => $value];
                     }, $blockedList)]],
@@ -161,21 +157,16 @@ class UserController extends Controller
                     'matches' => ['arrayValue' => ['values' => array_map(function ($value) {
                         return ['stringValue' => $value];
                     }, $matches)]],
-                    'profileImage' => ['arrayValue' => ['values' => array_map(function ($value) {
-                        return ['stringValue' => $value];
-                    }, $profileImage)]],
                     'profileViews' => ['arrayValue' => ['values' => array_map(function ($value) {
                         return ['stringValue' => $value];
                     }, $profileViews)]],
-
+                    'profileImage' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $profileImage)]],
                     'lastOnline' => ['timestampValue' => $lastOnline],
-
                     'longitude' => ['doubleValue' => $longitude],
                     'latitude' => ['doubleValue' => $latitude],
-
                     'about' => ['stringValue' => $request->input('about') ?? $existingUserData['fields']['about']['stringValue'] ?? ''],
-                 
-                    
                     'age' => ['stringValue' => $request->input('age') ?? $existingUserData['fields']['age']['stringValue'] ?? ''],
                     'alcohol' => ['stringValue' => $request->input('alcohol') ?? $existingUserData['fields']['alcohol']['stringValue'] ?? ''],
                     'bodyType' => ['stringValue' => $request->input('bodyType') ?? $existingUserData['fields']['bodyType']['stringValue'] ?? ''],
@@ -207,7 +198,7 @@ class UserController extends Controller
                     'longitude' => ['stringValue' => $request->input('longitude') ?? $existingUserData['fields']['longitude']['stringValue'] ?? ''],
                 ]
             ];
-    
+  
             // Send request to update the user data
             $response = $client->patch('users/' . $id, [
                 'json' => $userData,

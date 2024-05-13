@@ -42,7 +42,7 @@
                             <table class="table product-overview">
                                 <thead>
                                     <tr>
-                                        <th>Select</th>
+                                        {{-- <th>Select</th> --}}
                                         <th>Name</th>
                                         <th>Images</th>
                                      
@@ -51,25 +51,28 @@
                                 <tbody>
                                     @foreach ($usersPaginated as $user)
                                     <tr>
-                                        <td>
+                                        {{-- <td>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input user-checkbox" name="selectedUser" id="checkbox{{ $loop->index }}" value="{{ $user['uid']['stringValue'] }}">
                                                 <label class="form-check-label" for="checkbox{{ $loop->index }}"></label>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                         <td>{{ $user['name']['stringValue'] }}</td>
                                         <td>
                                             @if (isset($user['profileImage']['arrayValue']['values']))
                                                 <div class="image-gallery">
                                                     @foreach ($user['profileImage']['arrayValue']['values'] as $image)
                                                         <div class="image-container">
-                                                            <a href="{{ $image['stringValue'] }}" data-lightbox="user-images">
+                                                            <a href="#" class="image-link" data-src="{{ $image['stringValue'] }}">
                                                                 <img src="{{ $image['stringValue'] }}" alt="User Image" class="user-image">
                                                             </a>
-                                                            <a href="{{ route('delete.image', ['userId' => $user['uid']['stringValue'], 'imageUrl' => urlencode($image['stringValue'])]) }}" class="delete-icon" onclick="return confirm('Are you sure you want to delete this image?')">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                            </a>
-                                                            
+                                                            {{-- <form action="{{ route('delete.image', ['userId' => $user['uid']['stringValue'], 'imageUrl' => urlencode($image['stringValue'])]) }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="delete-icon" onclick="return confirm('Are you sure you want to delete this image?')">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            </form> --}}
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -77,22 +80,15 @@
                                                 No images
                                             @endif
                                         </td>
-                                        
-                                        
-                                        
-                            
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
 
                         <div class="d-flex justify-content-center">
-                        
                             {{ $usersPaginated->links('vendor.pagination.bootstrap-4') }}
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -100,5 +96,91 @@
     </div>
     <!-- End Container fluid  -->
 </div>
+<!-- Modal for displaying clicked image -->
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <div class="modal-content">
+        <img id="modalImage">
+    </div>
+</div>
+
+<style>
+    /* Style the modal */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 9999; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+    }
+
+    /* Modal Content (image) */
+    .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    /* Close button */
+    .close {
+        color: white;
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+        z-index: 99999;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #999;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Image */
+    #modalImage {
+        max-width: 90%;
+        max-height: 90%;
+    }
+</style>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("imageModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on an image, open the modal
+    var imageLinks = document.querySelectorAll('.image-link');
+    imageLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            var src = this.getAttribute('data-src');
+            document.getElementById("modalImage").src = src;
+            modal.style.display = "flex";
+        });
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+</script>
 
 @include('dash.footer')

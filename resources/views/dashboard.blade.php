@@ -132,7 +132,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex flex-row">
+                       <div class="d-flex flex-row">
                             <div class="round round-lg align-self-center round-warning">
                                 <i class="far fa-image"></i>
                             </div>
@@ -179,36 +179,49 @@
             </div>
             <!-- Column -->
         </div>
-
+        
+        
+        <div class="row">
+         <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Total Users by State</h4>
                 <ul class="list-group">
                     @foreach($usersByState as $state => $count)
-                        <li class="list-group-item">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>{{ $state }}: {{ $count }}</span>
                             <span class="badge badge-primary badge-pill">{{ round(($count / $totalUsers) * 100, 2) }}%</span>
+                            <div class="progress" style="height: 20px; width: 100%;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ($count / $totalUsers) * 100 }}%;" aria-valuenow="{{ ($count / $totalUsers) * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                         </li>
                     @endforeach
                 </ul>
             </div>
         </div>
-        
+    </div>
+
+    <div class="col-md-6">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Total Users by City</h4>
                 <ul class="list-group">
                     @foreach($usersByCity as $city => $count)
-                        <li class="list-group-item">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>{{ $city }}: {{ $count }}</span>
                             <span class="badge badge-primary badge-pill">{{ round(($count / $totalUsers) * 100, 2) }}%</span>
+                            <div class="progress" style="height: 20px; width: 100%;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ ($count / $totalUsers) * 100 }}%;" aria-valuenow="{{ ($count / $totalUsers) * 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
                         </li>
                     @endforeach
                 </ul>
             </div>
         </div>
-        
-        
+    </div>
+</div>
+
+
         
         @endif
         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4 )
@@ -219,7 +232,7 @@
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4 class="card-title m-b-0">All Users</h4>
-                            <button id="exportBtn" class="btn btn-primary">Export to CSV</button>
+                            <!--<button id="exportBtn" class="btn btn-primary">Export to CSV</button>-->
                         </div>
                     </div>
                     <div class="card-body collapse show">

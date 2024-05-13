@@ -176,62 +176,80 @@ public function adminstore(Request $request)
     }
     public function fetchImages(Request $request)
     {
-        
-            // Initialize GuzzleHTTP client
-            $client = new Client([
-                'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
-            ]);
-        
-            try {
-                // Send request to fetch users data
-                $response = $client->get('users');
-                $usersData = json_decode($response->getBody()->getContents(), true);
-        
-                $users = [];
-        
-                // Iterate through each document in the users collection
-                foreach ($usersData['documents'] as $document) {
-                    // Extract user data from the document
-                    $userData = $document['fields'];
-        
-                    // Add the user data to the array
-                    $users[] = $userData;
-                }
-        
-                // Filter users based on search query
-                $search = $request->input('search');
-                if ($search) {
-                    $users = array_filter($users, function ($user) use ($search) {
-                        return stripos($user['name']['stringValue'], $search) !== false ||
-                               stripos($user['email']['stringValue'], $search) !== false;
-                    });
-                }
-        
-                // Paginate the user data
-                $perPage = 10; // Number of items per page
-                $currentPage = $request->query('page', 1); // Get the current page from the query string
-                $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
-                $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
-                $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-                    $usersPaginated,
-                    count($users),
-                    $perPage,
-                    $currentPage,
-                    ['path' => url()->current()]
-                );
-        
-                // Pass user data to the view
-                return view('admin.users.images', [
-                    'users' => $users, // Pass the $users variable to the view
-                    'usersPaginated' => $usersPaginated,
-                ]);
-            } catch (\Exception $e) {
-                // Handle error
-                return response()->json(['error' => $e->getMessage()], 500);
+        // Initialize GuzzleHTTP client
+        $client = new Client([
+            'base_uri' => 'https://firestore.googleapis.com/v1/projects/genzee-baddies-1/databases/(default)/documents/',
+        ]);
+    
+        try {
+            // Send request to fetch users data
+            $response = $client->get('users');
+            $usersData = json_decode($response->getBody()->getContents(), true);
+    
+            $users = [];
+    
+            // Iterate through each document in the users collection
+            foreach ($usersData['documents'] as $document) {
+                // Extract user data from the document
+                $userData = $document['fields'];
+    
+                // Add the user data to the array
+                $users[] = $userData;
             }
     
-      
+            // Filter users based on search query
+            $search = $request->input('search');
+            if ($search) {
+                $users = array_filter($users, function ($user) use ($search) {
+                    return stripos($user['name']['stringValue'], $search) !== false ||
+                           stripos($user['email']['stringValue'], $search) !== false;
+                });
+            }
+    
+            // Check if a single profile image is deleted
+            $deletedImageUrl = $request->input('imageUrl');
+            $userId = $request->input('userId');
+            foreach ($users as &$user) {
+                if ($user['uid']['stringValue'] === $userId && isset($user['profileImage']['arrayValue']['values'])) {
+                    $images = $user['profileImage']['arrayValue']['values'];
+                    // Check if the deleted image is the only image in the array
+                    if (count($images) === 1 && $images[0]['stringValue'] === $deletedImageUrl) {
+                        // Update the profileImage field to contain an empty string
+                        $user['profileImage'] = ['stringValue' => ''];
+                    } else {
+                        // Remove the deleted image from the array
+                        $user['profileImage']['arrayValue']['values'] = array_filter($images, function ($image) use ($deletedImageUrl) {
+                            return $image['stringValue'] !== $deletedImageUrl;
+                        });
+                    }
+                }
+            }
+    
+            // Paginate the user data
+            $perPage = 10; // Number of items per page
+            $currentPage = $request->query('page', 1); // Get the current page from the query string
+            $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
+            $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
+            $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+                $usersPaginated,
+                count($users),
+                $perPage,
+                $currentPage,
+                ['path' => url()->current()]
+            );
+    
+            // Pass user data to the view
+            return view('admin.users.images', [
+                'users' => $users, // Pass the $users variable to the view
+                'usersPaginated' => $usersPaginated,
+            ]);
+        } catch (\Exception $e) {
+            // Handle error
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+    
+    
     
     public function deleteImage($userId, $imageUrl)
     {
@@ -252,17 +270,13 @@ public function adminstore(Request $request)
             // Failed to delete the image, return an error message
             return back()->with('error', 'Failed to delete image.');
         }
+
     } catch (RequestException $e) {
         // Handle request exception
         $errorMessage = $e->getResponse()->getBody()->getContents();
         return back()->with('error', 'Failed to delete image: ' . $errorMessage);
     }
-    }
-    
-
-    
-    
-    
+}
     
     public function adminsedit($id)
     {
