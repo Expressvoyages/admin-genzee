@@ -148,8 +148,8 @@
                                         </div>
                                     @endforeach
                                     
-                                   <!-- Hidden input field for deleted images -->
-                             <input type="hidden" name="deletedImages[]" id="deletedImages">
+                                    <input type="hidden" id="deletedImages" name="deletedImages" value="">
+
 
                                     </div>
                                 </div>
@@ -197,12 +197,12 @@
 }
 
  </style>
- <script>
-      function removeImage(button, imageUrl) {
+<script>
+    function removeImage(button, imageUrl) {
         var imageContainer = button.parentElement;
         imageContainer.remove();
 
-        // Append the URL of the removed image to the hidden input field
+        // Update the hidden input field with the URL of the removed image
         var deletedImagesInput = document.getElementById('deletedImages');
         var deletedImages = deletedImagesInput.value.split(',');
         deletedImages.push(imageUrl);

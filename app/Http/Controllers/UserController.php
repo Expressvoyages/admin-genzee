@@ -133,12 +133,25 @@ class UserController extends Controller
             // Handle longitude as a number
             $longitude = isset($existingUserData['fields']['longitude']['doubleValue']) ? $existingUserData['fields']['longitude']['doubleValue'] : null;
             $latitude = isset($existingUserData['fields']['latitude']['doubleValue']) ? $existingUserData['fields']['latitude']['doubleValue'] : null;
-    
-       
+                // Handle removal of images from profileImage array
+            if ($request->has('deletedImages')) {
+                $deletedImages = explode(',', $request->input('deletedImages'));
+                foreach ($deletedImages as $deletedImage) {
+                    // Remove the deleted image from the profileImage array
+                    $profileImage = array_diff($profileImage, [$deletedImage]);
+                }
+                
+                // Reindex the profileImage array
+                $profileImage = array_values($profileImage);
+            }
+
     
             // Prepare the user data to be updated
             $userData = [
                 'fields' => [
+                    'profileImage' => ['arrayValue' => ['values' => array_map(function ($value) {
+                        return ['stringValue' => $value];
+                    }, $profileImage)]],
                     'blockedList' => ['arrayValue' => ['values' => array_map(function ($value) {
                         return ['stringValue' => $value];
                     }, $blockedList)]],
@@ -198,7 +211,11 @@ class UserController extends Controller
                     'longitude' => ['stringValue' => $request->input('longitude') ?? $existingUserData['fields']['longitude']['stringValue'] ?? ''],
                 ]
             ];
-  
+
+
+
+
+//   dd($userData);
             // Send request to update the user data
             $response = $client->patch('users/' . $id, [
                 'json' => $userData,
