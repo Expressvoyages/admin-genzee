@@ -25,7 +25,7 @@
                 <div class="mt-3">
                     <form action="{{ route('users.index') }}" method="GET" class="form-inline">
                         <div class="form-group">
-                            <input type="text" name="search" class="form-control" placeholder="Search by Name or Email">
+                            <input type="text" name="search" class="form-control" placeholder="Search by Name or Email" value="{{ request('search') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Search</button>
                         @if(request('search'))
@@ -36,17 +36,12 @@
             </div>
         </div>
 
-    
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                @foreach ($usersGrouped as $date => $users)
+                <div class="card mt-3">
                     <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="card-title m-b-0">All Users</h4>
-                            <button id="exportrBtn" class="btn btn-primary">Export to CSV</button>
-                        </div>
-                        
-        
+                        <h4 class="card-title m-b-0">Users Joined on {{ $date }}</h4>
                     </div>
                     <div class="card-body collapse show">
                         <div class="table-responsive">
@@ -61,14 +56,13 @@
                                         @endif
                                         <th>Phone Number</th>
                                         <th>City / State</th>
-                                      
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)  
                                             <th>Action</th> 
                                         @endif
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($usersPaginated as $user)
+                                    @foreach ($users as $user)
                                     <tr>
                                         <td>
                                             <div class="form-check">
@@ -76,7 +70,6 @@
                                                 <label class="form-check-label" for="checkbox{{ $loop->index }}"></label>
                                             </div>
                                         </td>
-                                        
                                         <td>{{ $user['name']['stringValue'] }}</td>
                                         <td>{{ $user['email']['stringValue'] }}</td>
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)   
@@ -84,25 +77,6 @@
                                         @endif
                                         <td>{{ $user['phoneNumber']['stringValue'] }}</td>
                                         <td>{{ $user['city']['stringValue'] }} - {{ $user['state']['stringValue'] }}</td>
-                                        {{-- <td>
-                                            @if (isset($user['profileImage']['arrayValue']['values']))
-                                                <div class="image-gallery">
-                                                    @foreach ($user['profileImage']['arrayValue']['values'] as $image)
-                                                        <div class="image-container">
-                                                            <a href="{{ $image['stringValue'] }}" data-lightbox="user-images">
-                                                                <img src="{{ $image['stringValue'] }}" alt="User Image" class="user-image">
-                                                            </a>
-                                                            <a href="{{ route('delete.image', ['userId' => $user['uid']['stringValue'], 'imageUrl' => urlencode($image['stringValue'])]) }}" class="delete-icon" onclick="return confirm('Are you sure you want to delete this image?')">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                            </a>
-                                                            
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @else
-                                                No images
-                                            @endif
-                                        </td> --}}
                                         @if(Auth::user()->user_role != 3 && Auth::user()->user_role != 4)
                                         <td>
                                             <div class="btn-group" role="group" aria-label="User Actions">
@@ -119,15 +93,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
-
-                        <div class="d-flex justify-content-center">
-                        
-                            {{ $usersPaginated->links('vendor.pagination.bootstrap-4') }}
-                        </div>
-
                     </div>
+                </div>
+                @endforeach
+
+                <div class="d-flex justify-content-center">
+                    {{ $usersPaginated->links('vendor.pagination.bootstrap-4') }}
                 </div>
             </div>
         </div>
@@ -135,11 +107,8 @@
     <!-- End Container fluid  -->
 </div>
 
-
-
-
-
 @include('dash.footer')
+
 
 <script>
   $(document).ready(function () {

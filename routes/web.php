@@ -16,6 +16,8 @@ Route::get('/', [VerifieldController::class, 'home'])->name('home');
 Route::get('/about', [VerifieldController::class, 'about'])->name('about');
 Route::get('/pricing', [VerifieldController::class, 'price'])->name('price');
 Route::get('/ticket', [HelpPageController::class, 'index'])->name('help.index');
+Route::get('/privacy-policy', [HelpPageController::class, 'privacy'])->name('privacy');
+Route::get('/terms-condition', [HelpPageController::class, 'terms'])->name('terms');
 Route::post('/help', [HelpPageController::class, 'store'])->name('help.store');
 
 

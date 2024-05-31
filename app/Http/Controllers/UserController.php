@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserController extends Controller
 {
@@ -28,6 +30,13 @@ class UserController extends Controller
                 // Extract user data from the document
                 $userData = $document['fields'];
     
+                // Check if createdAt field exists and convert it to Carbon date
+                if (isset($userData['createdAt'])) {
+                    $userData['createdAt']['dateValue'] = Carbon::parse($userData['createdAt']['stringValue']);
+                } else {
+                    $userData['createdAt']['dateValue'] = Carbon::now(); // Set a default value if createdAt is missing
+                }
+    
                 // Add the user data to the array
                 $users[] = $userData;
             }
@@ -41,14 +50,25 @@ class UserController extends Controller
                 });
             }
     
+            // Sort users by createdAt in descending order
+            usort($users, function($a, $b) {
+                return $b['createdAt']['dateValue']->timestamp - $a['createdAt']['dateValue']->timestamp;
+            });
+    
+            // Group users by createdAt date
+            $usersGrouped = collect($users)->groupBy(function($user) {
+                return $user['createdAt']['dateValue']->format('Y-m-d');
+            });
+    
+            // Flatten the grouped users for pagination
+            $usersFlattened = $usersGrouped->flatten(1)->toArray();
+    
             // Paginate the user data
             $perPage = 10; // Number of items per page
-            $currentPage = $request->query('page', 1); // Get the current page from the query string
-            $usersPaginated = \Illuminate\Pagination\Paginator::resolveCurrentPage('usersPage');
-            $usersPaginated = array_slice($users, ($currentPage - 1) * $perPage, $perPage);
-            $usersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-                $usersPaginated,
-                count($users),
+            $currentPage = LengthAwarePaginator::resolveCurrentPage('usersPage');
+            $usersPaginated = new LengthAwarePaginator(
+                array_slice($usersFlattened, ($currentPage - 1) * $perPage, $perPage),
+                count($usersFlattened),
                 $perPage,
                 $currentPage,
                 ['path' => url()->current()]
@@ -56,7 +76,7 @@ class UserController extends Controller
     
             // Pass user data to the view
             return view('admin.users.users', [
-                'users' => $users, // Pass the $users variable to the view
+                'usersGrouped' => $usersGrouped,
                 'usersPaginated' => $usersPaginated,
             ]);
         } catch (\Exception $e) {
@@ -112,6 +132,7 @@ class UserController extends Controller
             $notificationMatches = isset($existingUserData['fields']['notificationMatches']) ? $existingUserData['fields']['notificationMatches']['booleanValue'] : false;
             $notificationViews = isset($existingUserData['fields']['notificationViews']) ? $existingUserData['fields']['notificationViews']['booleanValue'] : false;
             $online = isset($existingUserData['fields']['online']) ? $existingUserData['fields']['online']['booleanValue'] : false;
+            $banned = isset($existingUserData['fields']['banned']) ? $existingUserData['fields']['banned']['booleanValue'] : false;
     
             // Handle array fields
             $arrayFields = ['blockedList', 'chatList', 'hobbies', 'languages', 'likes', 'matches','profileImage','profileViews'];
@@ -194,6 +215,7 @@ class UserController extends Controller
                     'name' => ['stringValue' => $request->input('name') ?? $existingUserData['fields']['name']['stringValue'] ?? ''],
                     'paid' => ['booleanValue' => $paid],
                     'online' => ['booleanValue' => $online],
+                    'banned' => ['booleanValue' => $banned],
                     'notificationLikes' => ['booleanValue' => $notificationLikes],
                     'notificationMatches' => ['booleanValue' => $notificationMatches],
                     'notificationViews' => ['booleanValue' => $notificationViews],
@@ -209,6 +231,7 @@ class UserController extends Controller
                     'verified' => ['booleanValue' => $verified],
                     'weight' => ['stringValue' => $request->input('weight') ?? $existingUserData['fields']['weight']['stringValue'] ?? ''],
                     'longitude' => ['stringValue' => $request->input('longitude') ?? $existingUserData['fields']['longitude']['stringValue'] ?? ''],
+                    'createdAt' => ['stringValue' => $request->input('createdAt') ?? $existingUserData['fields']['createdAt']['stringValue'] ?? ''],
                 ]
             ];
 
